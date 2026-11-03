@@ -214,51 +214,65 @@
                 </div>
             </div>
 
-            <!-- Section Line-Up Lapangan Interaktif (Dua Tim: Tim A & Tim B) -->
-            <div class="glass-card rounded-2xl p-4 shadow-xl space-y-3">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-2 border-b border-gold/20 pb-2">
+            <!-- Section Line-Up Lapangan Interaktif (TIM A & TIM B) -->
+            <div class="glass-card rounded-2xl p-4 shadow-xl space-y-4">
+                <div class="flex items-center justify-between border-b border-gold/20 pb-2">
                     <h3 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-chess-board text-gold"></i> Line-Up Lapangan & Formasi
+                        <i class="fa-solid fa-chess-board text-gold"></i> Line-Up Tim A & Tim B
                     </h3>
-                    
-                    <!-- Tab Switcher Tim A / Tim B -->
-                    <div class="flex items-center bg-navy p-1 rounded-xl border border-gold/30">
-                        <button type="button" onclick="switchTeamLineup('teamA')" id="btnTeamA" class="px-3 py-1 rounded-lg text-xs font-bold transition gold-gradient-bg text-navy-dark">TIM A</button>
-                        <button type="button" onclick="switchTeamLineup('teamB')" id="btnTeamB" class="px-3 py-1 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">TIM B</button>
-                    </div>
+                    <span class="text-[10px] text-slate-400 italic">Klik posisi pemain untuk mengatur</span>
                 </div>
 
-                <!-- Control Bar Formasi Tim -->
-                <div class="flex items-center justify-between px-1">
-                    <span id="currentTeamTitle" class="text-xs font-bold text-gold flex items-center gap-1">
-                        <i class="fa-solid fa-people-group"></i> Line-Up Tim A
-                    </span>
-                    <div class="flex items-center space-x-2">
-                        <label class="text-[10px] text-slate-300 font-medium">Format:</label>
-                        <select id="formationTemplate" onchange="changeFormationTemplate(this.value)" class="bg-navy border border-gold/40 text-slate-200 text-xs rounded-lg p-1.5 outline-none w-32">
-                            <option value="7v7">7 vs 7 (3-2-1)</option>
-                            <option value="8v8">8 vs 8 (3-3-1)</option>
-                            <option value="11v11">11 vs 11 (4-3-3)</option>
-                        </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- LAPANGAN TIM A -->
+                    <div class="space-y-2 bg-navy/50 p-3 rounded-2xl border border-gold/30">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-gold flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield text-gold"></i> Line-Up TIM A
+                            </span>
+                            <select id="formationTeamA" onchange="changeTeamFormation('teamA', this.value)" class="bg-navy-dark border border-gold/40 text-slate-200 text-[11px] rounded-lg p-1 outline-none">
+                                <option value="7v7">7 vs 7 (3-2-1)</option>
+                                <option value="8v8">8 vs 8 (3-3-1)</option>
+                                <option value="11v11">11 vs 11 (4-3-3)</option>
+                            </select>
+                        </div>
+                        <div id="fieldTeamA" class="football-field w-full h-[420px] rounded-xl p-3 flex flex-col justify-between shadow-inner relative">
+                            <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 pointer-events-none"></div>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-white/20 rounded-full pointer-events-none"></div>
+                            <div id="slotsTeamA" class="w-full h-full flex flex-col justify-between relative z-10 py-1"></div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Tampilan Lapangan Bola -->
-                <div id="footballFieldContainer" class="football-field w-full h-[460px] rounded-2xl p-4 flex flex-col justify-between shadow-inner relative">
-                    <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 pointer-events-none"></div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white/20 rounded-full pointer-events-none"></div>
-                    
-                    <div id="lineupSlotsContainer" class="w-full h-full flex flex-col justify-between relative z-10 py-2">
-                        <!-- Injected via JS -->
+                    <!-- LAPANGAN TIM B -->
+                    <div class="space-y-2 bg-navy/50 p-3 rounded-2xl border border-gold/30">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield text-amber-400"></i> Line-Up TIM B
+                            </span>
+                            <select id="formationTeamB" onchange="changeTeamFormation('teamB', this.value)" class="bg-navy-dark border border-gold/40 text-slate-200 text-[11px] rounded-lg p-1 outline-none">
+                                <option value="7v7">7 vs 7 (3-2-1)</option>
+                                <option value="8v8">8 vs 8 (3-3-1)</option>
+                                <option value="11v11">11 vs 11 (4-3-3)</option>
+                            </select>
+                        </div>
+                        <div id="fieldTeamB" class="football-field w-full h-[420px] rounded-xl p-3 flex flex-col justify-between shadow-inner relative">
+                            <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 pointer-events-none"></div>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-white/20 rounded-full pointer-events-none"></div>
+                            <div id="slotsTeamB" class="w-full h-full flex flex-col justify-between relative z-10 py-1"></div>
+                        </div>
                     </div>
                 </div>
-                <p class="text-[10px] text-slate-400 italic text-center">* Admin dapat mengklik lingkaran pemain di lapangan untuk memilih nama dari list atau upload foto wajah.</p>
             </div>
 
-            <div class="pt-2">
+            <!-- Tombol Aksi WhatsApp & Pamflet -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
                 <button type="button" onclick="copyListToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
                     <i class="fa-brands fa-whatsapp text-base"></i>
                     <span>Salin List Rapi ke WhatsApp</span>
+                </button>
+                <button type="button" onclick="generateMatchFlyer()" class="w-full gold-gradient-bg text-navy-dark font-extrabold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer hover:opacity-95">
+                    <i class="fa-solid fa-image text-base"></i>
+                    <span>Download Pamflet Match (PNG)</span>
                 </button>
             </div>
         </section>
@@ -272,7 +286,6 @@
                     </h2>
                 </div>
 
-                <!-- 4 Kotak Filter Terpisah -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
@@ -374,7 +387,7 @@
         </div>
     </div>
 
-    <!-- Modal Admin Add / Edit Match -->
+    <!-- Modal Admin Add / Edit Match (Termasuk Input Logo Tim Lawan) -->
     <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card rounded-2xl p-6 w-full max-w-lg border border-gold/50 relative max-h-[90vh] overflow-y-auto">
             <button type="button" onclick="closeMatchModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
@@ -433,9 +446,15 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="text-[10px] text-gold-light font-medium block mb-1">Link Foto Dokumentasi (Gdrive / IG)</label>
-                    <input type="url" id="inputPhotoLink" placeholder="https://instagram.com/... atau https://drive.google.com/..." class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Link Foto Dokumentasi (Gdrive / IG)</label>
+                        <input type="url" id="inputPhotoLink" placeholder="https://instagram.com/..." class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Upload Logo Tim Lawan / Turnamen</label>
+                        <input type="file" id="inputOpponentLogo" accept="image/*" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-[11px] rounded-xl p-1.5 outline-none file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-gold file:text-navy-dark cursor-pointer">
+                    </div>
                 </div>
 
                 <div class="pt-2 flex gap-2">
@@ -452,8 +471,8 @@
             <button type="button" onclick="closeLineupModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
-            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-user-pen"></i> Atur Pemain & Foto Posisi
+            <h3 id="lineupModalTitle" class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-user-pen"></i> Atur Posisi Pemain
             </h3>
             
             <div class="space-y-3 text-xs">
@@ -465,8 +484,9 @@
                 </div>
                 <div>
                     <label class="text-[10px] text-gold-light font-medium block mb-1">Atau Upload Foto Wajah (Opsional)</label>
-                    <input type="file" id="lineupPhotoInput" accept="image/*" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2 outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-navy-dark hover:file:bg-gold-light cursor-pointer">
+                    <input type="file" id="lineupPhotoInput" accept="image/*" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2 outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-navy-dark cursor-pointer">
                 </div>
+                <input type="hidden" id="lineupTeamKey">
                 <input type="hidden" id="lineupSlotIndex">
 
                 <div class="pt-2 flex gap-2">
@@ -487,9 +507,7 @@
                 <i class="fa-solid fa-medal"></i> Detail Pertandingan / Turnamen
             </h3>
             
-            <div id="detailContent" class="space-y-3 text-xs text-slate-200">
-                <!-- Injected via JS -->
-            </div>
+            <div id="detailContent" class="space-y-3 text-xs text-slate-200"></div>
 
             <div class="mt-4 pt-3 border-t border-slate-700 flex gap-2">
                 <button type="button" onclick="closeDetailModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Tutup</button>
@@ -502,8 +520,7 @@
         let appState = {
             isAdmin: false,
             matches: [],
-            activeMatchId: null,
-            activeTeamTab: 'teamA' // 'teamA' atau 'teamB'
+            activeMatchId: null
         };
 
         const ADMIN_PASS = "kingcff2024";
@@ -581,7 +598,7 @@
             renderMatchSelector();
             renderActiveMatch();
             renderSquadLists();
-            renderLineupField();
+            renderBothLineupFields();
             renderStatsAndFilters();
             renderHistory();
             updateAdminUI();
@@ -799,54 +816,27 @@
             }
         }
 
-        // === FITUR DUA TIM LINE-UP (TIM A & TIM B) ===
-        function switchTeamLineup(teamKey) {
-            appState.activeTeamTab = teamKey;
-            
-            const btnA = document.getElementById('btnTeamA');
-            const btnB = document.getElementById('btnTeamB');
-            const title = document.getElementById('currentTeamTitle');
-
-            if (teamKey === 'teamA') {
-                btnA.className = "px-3 py-1 rounded-lg text-xs font-bold transition gold-gradient-bg text-navy-dark";
-                btnB.className = "px-3 py-1 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
-                title.innerHTML = `<i class="fa-solid fa-people-group"></i> Line-Up Tim A`;
-            } else {
-                btnB.className = "px-3 py-1 rounded-lg text-xs font-bold transition gold-gradient-bg text-navy-dark";
-                btnA.className = "px-3 py-1 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
-                title.innerHTML = `<i class="fa-solid fa-people-group"></i> Line-Up Tim B`;
-            }
-
-            renderLineupField();
+        function renderBothLineupFields() {
+            renderSingleField('teamA', 'slotsTeamA', 'formationTeamA');
+            renderSingleField('teamB', 'slotsTeamB', 'formationTeamB');
         }
 
-        function changeFormationTemplate(val) {
-            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
-            if (!activeMatch) return;
-            
-            const teamKey = appState.activeTeamTab; // 'teamA' atau 'teamB'
-            if (!activeMatch.formations) activeMatch.formations = {};
-            activeMatch.formations[teamKey] = val;
-
-            saveData();
-        }
-
-        function renderLineupField() {
-            const container = document.getElementById('lineupSlotsContainer');
+        function renderSingleField(teamKey, containerId, selectId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
             container.innerHTML = '';
 
             const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
             if (!activeMatch) return;
 
-            const teamKey = appState.activeTeamTab; // 'teamA' atau 'teamB'
-
-            // Inisialisasi struktur tim jika belum ada
             if (!activeMatch.teamLineups) activeMatch.teamLineups = { teamA: {}, teamB: {} };
             if (!activeMatch.teamLineups[teamKey]) activeMatch.teamLineups[teamKey] = {};
 
             if (!activeMatch.formations) activeMatch.formations = { teamA: '7v7', teamB: '7v7' };
             const formation = activeMatch.formations[teamKey] || '7v7';
-            document.getElementById('formationTemplate').value = formation;
+            
+            const selectElem = document.getElementById(selectId);
+            if (selectElem) selectElem.value = formation;
 
             const currentLineup = activeMatch.teamLineups[teamKey];
 
@@ -875,7 +865,7 @@
             }
 
             let slotIndex = 0;
-            rowsConfig.forEach((row, rIdx) => {
+            rowsConfig.forEach((row) => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = "flex justify-around items-center w-full my-auto";
                 
@@ -886,17 +876,17 @@
                     const playerNode = document.createElement('div');
                     playerNode.className = "flex flex-col items-center cursor-pointer group";
                     if (appState.isAdmin) {
-                        playerNode.onclick = () => openLineupModal(currentIdx);
+                        playerNode.onclick = () => openLineupModal(teamKey, currentIdx);
                     }
 
-                    let avatarContent = `<div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-gold flex items-center justify-center text-xs font-bold text-gold shadow-lg group-hover:scale-105 transition"><i class="fa-solid fa-user"></i></div>`;
+                    let avatarContent = `<div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 border-2 border-gold flex items-center justify-center text-[10px] md:text-xs font-bold text-gold shadow-lg group-hover:scale-105 transition"><i class="fa-solid fa-user"></i></div>`;
                     if (slotData.photo) {
-                        avatarContent = `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg group-hover:scale-105 transition"><img src="${slotData.photo}" class="w-full h-full object-cover"></div>`;
+                        avatarContent = `<div class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg group-hover:scale-105 transition"><img src="${slotData.photo}" class="w-full h-full object-cover"></div>`;
                     }
 
                     playerNode.innerHTML = `
                         ${avatarContent}
-                        <span class="bg-black/70 text-slate-100 text-[10px] px-2 py-0.5 rounded-full mt-1 border border-gold/30 font-semibold max-w-[80px] truncate">${slotData.name}</span>
+                        <span class="bg-black/70 text-slate-100 text-[9px] px-1.5 py-0.5 rounded-full mt-0.5 border border-gold/30 font-semibold max-w-[70px] truncate">${slotData.name}</span>
                     `;
                     rowDiv.appendChild(playerNode);
                 });
@@ -904,9 +894,23 @@
             });
         }
 
-        function openLineupModal(slotIdx) {
+        function changeTeamFormation(teamKey, val) {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+            
+            if (!activeMatch.formations) activeMatch.formations = {};
+            activeMatch.formations[teamKey] = val;
+
+            saveData();
+        }
+
+        function openLineupModal(teamKey, slotIdx) {
+            document.getElementById('lineupTeamKey').value = teamKey;
             document.getElementById('lineupSlotIndex').value = slotIdx;
             
+            const teamNameDisplay = teamKey === 'teamA' ? 'Tim A' : 'Tim B';
+            document.getElementById('lineupModalTitle').innerHTML = `<i class="fa-solid fa-user-pen"></i> Atur Posisi ${teamNameDisplay}`;
+
             const select = document.getElementById('lineupPlayerSelect');
             select.innerHTML = `<option value="">-- Pilih Pemain dari List --</option>`;
             
@@ -926,6 +930,7 @@
         }
 
         function saveLineupSlot() {
+            const teamKey = document.getElementById('lineupTeamKey').value;
             const slotIdx = document.getElementById('lineupSlotIndex').value;
             const selectedName = document.getElementById('lineupPlayerSelect').value;
             const photoInput = document.getElementById('lineupPhotoInput');
@@ -933,7 +938,6 @@
             const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
             if (!activeMatch) return;
 
-            const teamKey = appState.activeTeamTab;
             if (!activeMatch.teamLineups) activeMatch.teamLineups = { teamA: {}, teamB: {} };
             if (!activeMatch.teamLineups[teamKey]) activeMatch.teamLineups[teamKey] = {};
 
@@ -1011,43 +1015,65 @@
             const score = document.getElementById('inputScore').value.trim();
             const htm = document.getElementById('inputHtm').value.trim();
             const photoLink = document.getElementById('inputPhotoLink').value.trim();
+            const logoInput = document.getElementById('inputOpponentLogo');
 
-            if (editId) {
-                const matchIndex = appState.matches.findIndex(m => m.id == editId);
-                if (matchIndex !== -1) {
-                    appState.matches[matchIndex].type = type;
-                    appState.matches[matchIndex].title = title;
-                    appState.matches[matchIndex].venue = venue;
-                    appState.matches[matchIndex].teamList = teamList;
-                    appState.matches[matchIndex].date = date;
-                    appState.matches[matchIndex].time = time;
-                    appState.matches[matchIndex].score = score || 'Belum ada skor';
-                    appState.matches[matchIndex].htm = htm || '-';
-                    appState.matches[matchIndex].photoLink = photoLink || '';
+            const processSave = (logoBase64) => {
+                if (editId) {
+                    const matchIndex = appState.matches.findIndex(m => m.id == editId);
+                    if (matchIndex !== -1) {
+                        appState.matches[matchIndex].type = type;
+                        appState.matches[matchIndex].title = title;
+                        appState.matches[matchIndex].venue = venue;
+                        appState.matches[matchIndex].teamList = teamList;
+                        appState.matches[matchIndex].date = date;
+                        appState.matches[matchIndex].time = time;
+                        appState.matches[matchIndex].score = score || 'Belum ada skor';
+                        appState.matches[matchIndex].htm = htm || '-';
+                        appState.matches[matchIndex].photoLink = photoLink || '';
+                        if (logoBase64) {
+                            appState.matches[matchIndex].opponentLogo = logoBase64;
+                        }
+                    }
+                } else {
+                    const newMatch = {
+                        id: Date.now(),
+                        type: type,
+                        title: title,
+                        venue: venue,
+                        teamList: teamList,
+                        date: date,
+                        time: time,
+                        score: score || 'Belum ada skor',
+                        htm: htm || '-',
+                        photoLink: photoLink || '',
+                        opponentLogo: logoBase64 || '',
+                        formations: { teamA: '7v7', teamB: '7v7' },
+                        players: [],
+                        teamLineups: { teamA: {}, teamB: {} }
+                    };
+                    appState.matches.unshift(newMatch);
+                    appState.activeMatchId = newMatch.id;
                 }
-            } else {
-                const newMatch = {
-                    id: Date.now(),
-                    type: type,
-                    title: title,
-                    venue: venue,
-                    teamList: teamList,
-                    date: date,
-                    time: time,
-                    score: score || 'Belum ada skor',
-                    htm: htm || '-',
-                    photoLink: photoLink || '',
-                    formations: { teamA: '7v7', teamB: '7v7' },
-                    players: [],
-                    teamLineups: { teamA: {}, teamB: {} }
-                };
-                appState.matches.unshift(newMatch);
-                appState.activeMatchId = newMatch.id;
-            }
 
-            saveData();
-            closeMatchModal();
-            document.getElementById('newMatchForm').reset();
+                saveData();
+                closeMatchModal();
+                document.getElementById('newMatchForm').reset();
+            };
+
+            if (logoInput.files && logoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    processSave(evt.target.result);
+                };
+                reader.readAsDataURL(logoInput.files[0]);
+            } else {
+                let existingLogo = '';
+                if (editId) {
+                    const existing = appState.matches.find(m => m.id == editId);
+                    if (existing) existingLogo = existing.opponentLogo || '';
+                }
+                processSave(existingLogo);
+            }
         }
 
         function deleteActiveMatch() {
@@ -1057,6 +1083,177 @@
             appState.matches = appState.matches.filter(m => m.id !== appState.activeMatchId);
             appState.activeMatchId = appState.matches.length > 0 ? getNearestUpcomingMatchId(appState.matches) : null;
             saveData();
+        }
+
+        // === FITUR GENERATE PAMFLET / POSTER MATCH (HTML5 CANVAS) ===
+        function generateMatchFlyer() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                alert('Belum ada jadwal match untuk di-generate pamfletnya.');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 1080;
+            canvas.height = 1350; // Ukuran standar IG Post (4:5)
+            const ctx = canvas.getContext('2d');
+
+            // 1. Background Gradient & Pattern
+            const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1350);
+            bgGrad.addColorStop(0, '#050E1A');
+            bgGrad.addColorStop(0.5, '#0D1B2A');
+            bgGrad.addColorStop(1, '#050E1A');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, 1080, 1350);
+
+            // Aksen Gold Border Frame
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 12;
+            ctx.strokeRect(30, 30, 1020, 1290);
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(45, 45, 990, 1260);
+
+            // 2. Header Title
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = '800 32px Montserrat, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CUMA FUN FOOTBALL FAMILY', 540, 110);
+
+            ctx.fillStyle = '#F3E5AB';
+            ctx.font = '700 48px Montserrat, sans-serif';
+            ctx.fillText((activeMatch.title || 'FUN FOOTBALL MATCH').toUpperCase(), 540, 175);
+
+            // 3. Logo Section (CFF vs Lawan)
+            // Logo CFF (Load dari gambar asli tag img header atau placeholder emas)
+            const cffImg = document.querySelector('header img');
+            
+            const drawFlyerContent = (logoImgObj) => {
+                // Kotak Logo Kiri (CFF)
+                ctx.fillStyle = 'rgba(13, 27, 42, 0.9)';
+                ctx.beginPath();
+                ctx.roundRect(140, 230, 240, 240, 24);
+                ctx.fill();
+                ctx.strokeStyle = '#D4AF37';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                if (cffImg && cffImg.complete) {
+                    ctx.drawImage(cffImg, 180, 255, 160, 160);
+                }
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '700 24px Montserrat, sans-serif';
+                ctx.fillText('CFF FC', 260, 495);
+
+                // Teks VS
+                ctx.fillStyle = '#D4AF37';
+                ctx.font = '800 44px Montserrat, sans-serif';
+                ctx.fillText('VS', 540, 375);
+
+                // Kotak Logo Kanan (Lawan / Turnamen)
+                ctx.fillStyle = 'rgba(13, 27, 42, 0.9)';
+                ctx.beginPath();
+                ctx.roundRect(700, 230, 240, 240, 24);
+                ctx.fill();
+                ctx.strokeStyle = '#D4AF37';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                if (activeMatch.opponentLogo) {
+                    const oppImg = new Image();
+                    oppImg.onload = function() {
+                        ctx.drawImage(oppImg, 740, 255, 160, 160);
+                        drawLowerFlyerDetails();
+                    };
+                    oppImg.src = activeMatch.opponentLogo;
+                } else {
+                    // Placeholder jika tidak ada logo lawan
+                    ctx.fillStyle = '#D4AF37';
+                    ctx.font = '700 20px Montserrat, sans-serif';
+                    ctx.fillText('LAWAI /', 820, 320);
+                    ctx.fillText('TIM', 820, 355);
+                    drawLowerFlyerDetails();
+                }
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '700 24px Montserrat, sans-serif';
+                ctx.fillText(activeMatch.teamList || 'TIM LAWAN', 820, 495);
+            };
+
+            const drawLowerFlyerDetails = () => {
+                // 4. Informasi Detail (Venue, Tanggal, Jam)
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+                ctx.beginPath();
+                ctx.roundRect(100, 530, 880, 140, 20);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+                ctx.stroke();
+
+                const d = new Date(activeMatch.date);
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const dateStr = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+                ctx.fillStyle = '#F3E5AB';
+                ctx.font = '600 22px Montserrat, sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(`🏟️ Venue : ${activeMatch.venue}`, 140, 580);
+                ctx.fillText(`📅 Tanggal : ${dateStr}`, 140, 620);
+                ctx.fillText(`⏰ Jam Main : ${activeMatch.time}`, 140, 660);
+
+                // 5. List Pemain Utama (Max 16)
+                ctx.fillStyle = '#D4AF37';
+                ctx.font = '800 26px Montserrat, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('SQUAD PEMAIN UTAMA', 540, 725);
+
+                const players = (activeMatch.players || []).slice(0, 16);
+                
+                ctx.font = '600 20px Montserrat, sans-serif';
+                let startX = 140;
+                let startY = 770;
+                let colWidth = 400;
+                let rowHeight = 45;
+
+                for (let i = 0; i < 16; i++) {
+                    let col = i < 8 ? 0 : 1;
+                    let row = i < 8 ? i : i - 8;
+                    let x = startX + (col * colWidth);
+                    let y = startY + (row * rowHeight);
+
+                    let pName = players[i] ? `${i+1}. ${players[i].name} (${players[i].position})` : `${i+1}. -`;
+                    
+                    ctx.fillStyle = players[i] ? 'rgba(13, 27, 42, 0.7)' : 'rgba(13, 27, 42, 0.3)';
+                    ctx.beginPath();
+                    ctx.roundRect(x, y - 28, 380, 38, 8);
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+                    ctx.stroke();
+
+                    ctx.fillStyle = players[i] ? '#FFFFFF' : '#64748B';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(pName, x + 15, y - 4);
+                }
+
+                // Footer Pamflet
+                ctx.fillStyle = '#D4AF37';
+                ctx.font = '700 20px Montserrat, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('🔥 CUMA FUN FOOTBALL - STAY SOLID & HAVE FUN! 🔥', 540, 1260);
+
+                // Export ke File Gambar PNG
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.download = `Pamflet-Match-${activeMatch.date}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }, 300);
+            };
+
+            if (cffImg) {
+                drawFlyerContent(cffImg);
+            } else {
+                drawFlyerContent(null);
+            }
         }
 
         function copyListToWhatsApp() {
@@ -1086,7 +1283,7 @@
                 text += `🏆 *Skor:* ${activeMatch.score}\n`;
             }
             if (activeMatch.photoLink) {
-                text += `📸 *Foto/Dokumentasi:* ${activeMatch.photoLink}\n`;
+                text += `📸 *Dokumentasi:* ${activeMatch.photoLink}\n`;
             }
             text += `------------------------------------\n\n`;
 
@@ -1107,6 +1304,26 @@
                 waitingSquad.forEach((p, idx) => {
                     text += `${idx+17}. ${p.name} (${p.position})\n`;
                 });
+            }
+
+            if (activeMatch.teamLineups) {
+                if (activeMatch.teamLineups.teamA && Object.keys(activeMatch.teamLineups.teamA).length > 0) {
+                    text += `\n👕 *LINE-UP TIM A (${activeMatch.formations ? activeMatch.formations.teamA : '7v7'}):*\n`;
+                    for (const [idx, slot] of Object.entries(activeMatch.teamLineups.teamA)) {
+                        if (slot && slot.name && !['Kiper', 'Striker', 'Mid', 'Def', 'LW', 'ST', 'RW', 'CM', 'LB', 'CB', 'RB', 'GK'].includes(slot.name)) {
+                            text += `- ${slot.name}\n`;
+                        }
+                    }
+                }
+
+                if (activeMatch.teamLineups.teamB && Object.keys(activeMatch.teamLineups.teamB).length > 0) {
+                    text += `\n👕 *LINE-UP TIM B (${activeMatch.formations ? activeMatch.formations.teamB : '7v7'}):*\n`;
+                    for (const [idx, slot] of Object.entries(activeMatch.teamLineups.teamB)) {
+                        if (slot && slot.name && !['Kiper', 'Striker', 'Mid', 'Def', 'LW', 'ST', 'RW', 'CM', 'LB', 'CB', 'RB', 'GK'].includes(slot.name)) {
+                            text += `- ${slot.name}\n`;
+                        }
+                    }
+                }
             }
 
             text += `\nYuk amankan slot kalian! 🔥⚽`;
