@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King C.F.F. Family - Fun Football App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs (Compat version for simple CDN integration) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        // === KONFIGURASI FIREBASE DATABASE ===
+        // Ganti URL di bawah ini dengan URL Realtime Database dari Firebase Console Anda!
+        const DATABASE_URL = "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com/";
+
+        let db = null;
+        if (DATABASE_URL && !DATABASE_URL.includes("YOUR_PROJECT_ID")) {
+            firebase.initializeApp({ databaseURL: DATABASE_URL });
+            db = firebase.database();
+        }
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#F3E5AB',
+                            DEFAULT: '#D4AF37',
+                            dark: '#AA7C11',
+                            metallic: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)'
+                        },
+                        navy: {
+                            light: '#1B2A4A',
+                            DEFAULT: '#0D1B2A',
+                            dark: '#050E1A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 70%, #FBF5B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border-gradient {
+            border-image: linear-gradient(135deg, #BF953F, #FCF6BA, #AA771C) 1;
+        }
+        .bg-stripes {
+            background-color: #050E1A;
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(212, 175, 55, 0.05),
+                rgba(212, 175, 55, 0.05) 20px,
+                transparent 20px,
+                transparent 40px
+            );
+        }
+        .glass-card {
+            background: rgba(13, 27, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-navy-dark text-slate-100 font-sans min-h-screen pb-24 md:pb-8 bg-stripes">
+
+    <!-- Header Banner -->
+    <header class="glass-card sticky top-0 z-40 border-b border-gold/30 shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <!-- Visual Logo SVG -->
+                <div class="w-12 h-12 relative flex-shrink-0">
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]">
+                        <path d="M100 10 L175 40 L175 120 L100 185 L25 120 L25 40 Z" fill="#0D1B2A" stroke="url(#goldGrad)" stroke-width="6"/>
+                        <path d="M100 22 L163 47 L163 113 L100 170 L37 113 L37 47 Z" fill="#0A1424" stroke="#D4AF37" stroke-width="2"/>
+                        <path d="M70 20 L80 5 L100 15 L120 5 L130 20 Z" fill="url(#goldGrad)"/>
+                        <circle cx="100" cy="100" r="45" fill="none" stroke="url(#goldGrad)" stroke-width="4"/>
+                        <circle cx="100" cy="100" r="32" fill="#050E1A" stroke="#D4AF37" stroke-width="2"/>
+                        <polygon points="100,75 110,85 105,98 95,98 90,85" fill="#FCF6BA"/>
+                        <line x1="100" y1="75" x2="100" y2="68" stroke="#D4AF37" stroke-width="2"/>
+                        <line x1="110" y1="85" x2="117" y2="88" stroke="#D4AF37" stroke-width="2"/>
+                        <line x1="105" y1="98" x2="111" y2="105" stroke="#D4AF37" stroke-width="2"/>
+                        <line x1="95" y1="98" x2="89" y2="105" stroke="#D4AF37" stroke-width="2"/>
+                        <line x1="90" y1="85" x2="83" y2="88" stroke="#D4AF37" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#BF953F" />
+                                <stop offset="30%" stop-color="#FCF6BA" />
+                                <stop offset="70%" stop-color="#B38728" />
+                                <stop offset="100%" stop-color="#AA771C" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold tracking-wider gold-gradient-text uppercase">KING C.F.F. FAMILY</h1>
+                    <p class="text-[10px] md:text-xs text-gold-light/70 font-semibold tracking-widest uppercase">Cuma Fun Football FC 2024</p>
+                </div>
+            </div>
+
+            <!-- Admin Login Button / Status Indicator -->
+            <div id="adminControls">
+                <button onclick="toggleAdminLoginModal()" id="adminLoginBtn" class="px-3 py-1.5 rounded-lg border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition flex items-center space-x-1">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-4">
+
+        <!-- Banner Info Warning jika Database Belum Diset -->
+        <div id="dbWarning" class="hidden mb-4 p-3 bg-amber-900/50 border border-amber-500 rounded-lg text-amber-200 text-xs text-center">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
+            Database URL belum terpasang di file HTML. Data masih tersimpan sementara di local browser HP Anda.
+        </div>
+
+        <!-- Section 1: Dashboard Stats & Filters -->
+        <section id="sec-stats" class="space-y-4">
+            <div class="glass-card rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
+                    <h2 class="text-sm font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i> Statistik & Filter Pertandingan
+                    </h2>
+                    <span class="text-[10px] text-slate-400">Real-time DB</span>
+                </div>
+
+                <!-- Filter Form -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
+                        <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
+                            <option value="ALL">Semua Lapangan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Bulan</label>
+                        <select id="filterMonth" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
+                            <option value="ALL">Semua Bulan</option>
+                            <option value="0">Januari</option>
+                            <option value="1">Februari</option>
+                            <option value="2">Maret</option>
+                            <option value="3">April</option>
+                            <option value="4">Mei</option>
+                            <option value="5">Juni</option>
+                            <option value="6">Juli</option>
+                            <option value="7">Agustus</option>
+                            <option value="8">September</option>
+                            <option value="9">Oktober</option>
+                            <option value="10">November</option>
+                            <option value="11">Desember</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 md:col-span-1">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
+                        <select id="filterYear" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
+                            <option value="ALL">Semua Tahun</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Stats Summary Badges -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Total Main (Filtered)</span>
+                        <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
+                        <span class="text-[9px] text-slate-400 block mt-0.5">Kali Pertandingan</span>
+                    </div>
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
+                        <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
+                        <span id="statTopVenueCount" class="text-[9px] text-gold block">0 match</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Active Match Session & Player Registration -->
+        <section id="sec-match" class="space-y-4 mt-6">
+            <!-- Active Match Header Card -->
+            <div class="glass-card rounded-2xl p-4 shadow-xl border-l-4 border-l-gold relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="inline-block bg-gold/20 text-gold border border-gold/40 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase mb-1">Jadwal Pertandingan Terdekat</span>
+                        <h2 id="matchVenueDisplay" class="text-lg font-extrabold text-slate-100">Belum ada jadwal main</h2>
+                    </div>
+                    <button id="adminAddMatchBtn" onclick="openMatchModal()" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Admin: Buat Match
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-slate-300 mt-3 pt-3 border-t border-slate-700/50">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-regular fa-calendar-check text-gold"></i>
+                        <span id="matchDateDisplay">-</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-regular fa-clock text-gold"></i>
+                        <span id="matchTimeDisplay">-</span>
+                    </div>
+                    <div class="col-span-2 md:col-span-1 flex items-center space-x-2">
+                        <i class="fa-solid fa-users text-gold"></i>
+                        <span>Slot: <strong id="slotCountDisplay" class="text-gold">0</strong> / 16 Utama</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Pendaftaran Pemain -->
+            <div class="glass-card rounded-2xl p-4 shadow-xl">
+                <h3 class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i> Form Pendaftaran Pemain
+                </h3>
+                <form id="playerForm" onsubmit="handleRegisterPlayer(event)" class="flex flex-col md:flex-row gap-2">
+                    <input type="text" id="playerName" placeholder="Nama Lengkap / Panggilan" required class="flex-1 bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
+                    <select id="playerPosition" class="bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
+                        <option value="Pemain">Pemain (Any)</option>
+                        <option value="Kiper">Kiper (GK)</option>
+                        <option value="Bek">Bek (DF)</option>
+                        <option value="Gelandang">Gelandang (MF)</option>
+                        <option value="Striker">Striker (FW)</option>
+                    </select>
+                    <button type="submit" class="gold-gradient-bg text-navy-dark font-extrabold text-xs px-5 py-3 rounded-xl hover:opacity-95 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check"></i> Daftar Main
+                    </button>
+                </form>
+            </div>
+
+            <!-- List Pemain (16 Slot Utama & Waiting List) -->
+            <div class="grid md:grid-cols-2 gap-4">
+                
+                <!-- Main Squad (16 Slot) -->
+                <div class="glass-card rounded-2xl p-4 shadow-xl">
+                    <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
+                        <h3 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-[#0D1B2A] fa-shield-halved text-gold"></i> List Pemain Utama (Max 16)
+                        </h3>
+                        <span id="badgeUtama" class="bg-emerald-900/60 text-emerald-400 border border-emerald-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0/16</span>
+                    </div>
+
+                    <div id="mainSquadList" class="space-y-2 min-h-[160px]">
+                        <!-- Player items will be dynamically injected here -->
+                    </div>
+                </div>
+
+                <!-- Waiting List (Pendaftar 17+) -->
+                <div class="glass-card rounded-2xl p-4 shadow-xl">
+                    <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
+                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Waiting List (Cadangan)
+                        </h3>
+                        <span id="badgeWaiting" class="bg-amber-900/60 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0 Orang</span>
+                    </div>
+
+                    <div id="waitingSquadList" class="space-y-2 min-h-[160px]">
+                        <!-- Waiting list items will be dynamically injected here -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Share to WA Button -->
+            <div class="pt-2">
+                <button onclick="copyListToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Salin List Rapi ke WhatsApp</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 3: History & Records -->
+        <section id="sec-history" class="space-y-4 mt-6">
+            <div class="glass-card rounded-2xl p-4 shadow-xl">
+                <h2 class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-history"></i> Riwayat Pertandingan Klub
+                </h2>
+                <div id="historyMatchList" class="space-y-3">
+                    <!-- History items injected here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-navy/95 backdrop-blur-md border-t border-gold/30 z-30 px-6 py-2 flex justify-around md:hidden">
+        <button onclick="switchTab('sec-match')" class="nav-btn text-gold flex flex-col items-center space-y-1">
+            <i class="fa-solid fa-calendar-day text-base"></i>
+            <span class="text-[10px] font-semibold">Jadwal</span>
+        </button>
+        <button onclick="switchTab('sec-stats')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1">
+            <i class="fa-solid fa-chart-simple text-base"></i>
+            <span class="text-[10px] font-semibold">Statistik</span>
+        </button>
+        <button onclick="switchTab('sec-history')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1">
+            <i class="fa-solid fa-clock-rotate-left text-base"></i>
+            <span class="text-[10px] font-semibold">Riwayat</span>
+        </button>
+    </nav>
+
+    <!-- Modal Admin Login -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
+            <button onclick="toggleAdminLoginModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-user-shield"></i> Login Admin
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">Masukkan password untuk mendapat akses edit & tambah jadwal.</p>
+            
+            <input type="password" id="adminPasswordInput" placeholder="Password Admin" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none mb-4">
