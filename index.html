@@ -162,6 +162,13 @@
                         <span>Slot: <strong id="slotCountDisplay" class="text-gold">0</strong> / 16 Utama</span>
                     </div>
                 </div>
+
+                <!-- Indikator Link Foto Dokumentasi di Header Card -->
+                <div id="matchPhotoLinkContainer" class="mt-3 pt-2 border-t border-slate-700/30 hidden">
+                    <a id="matchPhotoLinkAnchor" href="#" target="_blank" class="text-gold hover:underline text-xs flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-camera"></i> <span id="matchPhotoLinkText">Lihat Foto / Dokumentasi Match</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Form Pendaftaran Pemain -->
@@ -501,8 +508,9 @@
                 const data = snapshot.val();
                 if (data && data.matches && data.matches.length > 0) {
                     appState.matches = data.matches;
-                    if (!appState.matches.some(m => m.id === appState.activeMatchId)) {
-                        appState.activeMatchId = data.matches[0].id;
+                    
+                    if (!appState.activeMatchId || !appState.matches.some(m => m.id === appState.activeMatchId)) {
+                        appState.activeMatchId = getNearestUpcomingMatchId(appState.matches);
                     }
                 } else {
                     appState.matches = [];
@@ -530,10 +538,29 @@
                 try {
                     const parsed = JSON.parse(local);
                     appState.matches = parsed.matches || [];
-                    appState.activeMatchId = parsed.activeMatchId || (appState.matches.length > 0 ? appState.matches[0].id : null);
+                    appState.activeMatchId = parsed.activeMatchId && appState.matches.some(m => m.id === parsed.activeMatchId) 
+                        ? parsed.activeMatchId 
+                        : getNearestUpcomingMatchId(appState.matches);
                 } catch(e) {}
             }
             renderAll();
+        }
+
+        function getNearestUpcomingMatchId(matches) {
+            if (!matches || matches.length === 0) return null;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let upcomingMatches = matches.filter(m => new Date(m.date) >= today);
+
+            if (upcomingMatches.length > 0) {
+                upcomingMatches.sort((a, b) => new Date(a.date) - new Date(b.date));
+                return upcomingMatches[0].id;
+            } else {
+                let sortedByDate = [...matches].sort((a, b) => new Date(b.date) - new Date(a.date));
+                return sortedByDate[0].id;
+            }
         }
 
         function renderAll() {
@@ -627,6 +654,7 @@
                 document.getElementById('matchDateDisplay').innerText = "-";
                 document.getElementById('matchTimeDisplay').innerText = "-";
                 document.getElementById('slotCountDisplay').innerText = "0";
+                document.getElementById('matchPhotoLinkContainer').classList.add('hidden');
                 return;
             }
 
@@ -654,6 +682,19 @@
             
             if (activeMatch.formation) {
                 document.getElementById('formationTemplate').value = activeMatch.formation;
+            }
+
+            // Render Link Foto Dokumentasi jika ada
+            const photoContainer = document.getElementById('matchPhotoLinkContainer');
+            const photoAnchor = document.getElementById('matchPhotoLinkAnchor');
+            const photoText = document.getElementById('matchPhotoLinkText');
+
+            if (activeMatch.photoLink && activeMatch.photoLink.trim() !== "") {
+                photoAnchor.href = activeMatch.photoLink;
+                photoText.innerText = `Dokumentasi / Foto Match (${activeMatch.score !== 'Belum ada skor' ? activeMatch.score : 'Selesai'})`;
+                photoContainer.classList.remove('hidden');
+            } else {
+                photoContainer.classList.add('hidden');
             }
         }
 
@@ -925,7 +966,6 @@
             const photoLink = document.getElementById('inputPhotoLink').value.trim();
 
             if (editId) {
-                // Mode Edit
                 const matchIndex = appState.matches.findIndex(m => m.id == editId);
                 if (matchIndex !== -1) {
                     appState.matches[matchIndex].type = type;
@@ -939,7 +979,6 @@
                     appState.matches[matchIndex].photoLink = photoLink || '';
                 }
             } else {
-                // Mode Tambah Baru
                 const newMatch = {
                     id: Date.now(),
                     type: type,
@@ -969,7 +1008,7 @@
             if (!confirm('Yakin ingin menghapus pertandingan terpilih ini? Seluruh data pendaftar & riwayat match ini akan hilang.')) return;
 
             appState.matches = appState.matches.filter(m => m.id !== appState.activeMatchId);
-            appState.activeMatchId = appState.matches.length > 0 ? appState.matches[0].id : null;
+            appState.activeMatchId = appState.matches.length > 0 ? getNearestUpcomingMatchId(appState.matches) : null;
             saveData();
         }
 
@@ -1170,7 +1209,7 @@
                     <p><strong>Hari, Tanggal:</strong> ${formattedDate} (${match.time})</p>
                     <p><strong>Skor / Hasil:</strong> <span class="text-gold font-bold">${match.score}</span></p>
                     <p><strong>HTM / Patungan:</strong> ${match.htm}</p>
-                    ${match.photoLink ? `<p><strong>Dokumentasi:</strong> <a href="${match.photoLink}" target="_blank" class="text-gold underline">Buka Link Foto / Gdrive</a></p>` : ''}
+                    ${match.photoLink ? `<p><strong>Dokumentasi:</strong> <a href="${match.photoLink}" target="_blank" class="text-gold underline font-semibold flex items-center gap-1 mt-1"><i class="fa-solid fa-camera"></i> Buka Link Foto / Gdrive</a></p>` : ''}
                     <hr class="border-slate-700 my-2">
                     <p class="font-bold text-gold">Daftar Pemain Hadir (${(match.players || []).length} Orang):</p>
                     <div class="max-h-40 overflow-y-auto space-y-1 bg-navy/40 p-2 rounded-lg">
@@ -1207,7 +1246,7 @@
             if (!confirm('Yakin ingin menghapus riwayat pertandingan ini?')) return;
             appState.matches = appState.matches.filter(m => m.id !== matchId);
             if (appState.activeMatchId === matchId) {
-                appState.activeMatchId = appState.matches.length > 0 ? appState.matches[0].id : null;
+                appState.activeMatchId = appState.matches.length > 0 ? getNearestUpcomingMatchId(appState.matches) : null;
             }
             saveData();
             closeDetailModal();
