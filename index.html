@@ -256,4 +256,967 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
-                        <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded
+                        <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Lapangan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim Lawan</label>
+                        <select id="filterTeam" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Tim Lawan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Bulan</label>
+                        <select id="filterMonth" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Bulan</option>
+                            <option value="0">Januari</option>
+                            <option value="1">Februari</option>
+                            <option value="2">Maret</option>
+                            <option value="3">April</option>
+                            <option value="4">Mei</option>
+                            <option value="5">Juni</option>
+                            <option value="6">Juli</option>
+                            <option value="7">Agustus</option>
+                            <option value="8">September</option>
+                            <option value="9">Oktober</option>
+                            <option value="10">November</option>
+                            <option value="11">Desember</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
+                        <select id="filterYear" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Tahun</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Total Main (Filtered)</span>
+                        <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
+                    </div>
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
+                        <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: History & Records -->
+        <section id="sec-history" class="space-y-4 hidden">
+            <div class="glass-card rounded-2xl p-4 shadow-xl">
+                <div class="flex justify-between items-center mb-3 border-b border-gold/20 pb-2">
+                    <h2 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-history"></i> Riwayat Pertandingan & Turnamen
+                    </h2>
+                    <span class="text-[10px] text-slate-400">Klik riwayat untuk detail</span>
+                </div>
+                <div id="historyMatchList" class="space-y-3"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-navy/95 backdrop-blur-md border-t border-gold/30 z-30 px-6 py-2 flex justify-around md:hidden">
+        <button type="button" onclick="switchTab('sec-match')" class="nav-btn text-gold flex flex-col items-center space-y-1 cursor-pointer">
+            <i class="fa-solid fa-calendar-day text-base"></i>
+            <span class="text-[10px] font-semibold">Jadwal</span>
+        </button>
+        <button type="button" onclick="switchTab('sec-stats')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1 cursor-pointer">
+            <i class="fa-solid fa-chart-simple text-base"></i>
+            <span class="text-[10px] font-semibold">Statistik</span>
+        </button>
+        <button type="button" onclick="switchTab('sec-history')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1 cursor-pointer">
+            <i class="fa-solid fa-clock-rotate-left text-base"></i>
+            <span class="text-[10px] font-semibold">Riwayat</span>
+        </button>
+    </nav>
+
+    <!-- Modal Admin Login -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-user-shield"></i> Login Admin
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">Masukkan password untuk akses penuh.</p>
+            <input type="password" id="adminPasswordInput" placeholder="Password Admin" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none mb-4">
+            <div class="flex gap-2">
+                <button type="button" onclick="closeAdminModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                <button type="button" onclick="verifyAdminPassword()" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Add / Edit Match -->
+    <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-lg border border-gold/50 relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeMatchModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 id="matchModalTitle" class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-plus"></i> Buat Pertandingan Baru
+            </h3>
+            
+            <form id="newMatchForm" onsubmit="handleSaveMatch(event)" class="space-y-3">
+                <input type="hidden" id="editMatchId">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tipe Laga</label>
+                        <select id="inputType" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                            <option value="fun">Fun Football / Friendly</option>
+                            <option value="trofeo">Trofeo / Turnamen</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Judul Match / Nama Laga</label>
+                        <input type="text" id="inputMatchTitle" placeholder="Contoh: Match Pekan 12" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
+                        <input type="text" id="inputVenue" placeholder="Contoh: Mabrur Pratama" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Daftar Tim Lawan (Pisah koma)</label>
+                        <input type="text" id="inputTeamList" placeholder="Contoh: Tim C atau Tim C, Tim D" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tanggal</label>
+                        <input type="date" id="inputDate" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Jam Main</label>
+                        <input type="text" id="inputTime" placeholder="16:00 - 18:00 WIB" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Skor / Hasil Akhir</label>
+                        <input type="text" id="inputScore" placeholder="Contoh: Menang 3-1 / Seri 2-2" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">HTM / Patungan (Rp)</label>
+                        <input type="text" id="inputHtm" placeholder="Contoh: Rp 35.000" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Link Foto Dokumentasi (Gdrive / IG)</label>
+                    <input type="url" id="inputPhotoLink" placeholder="https://instagram.com/... atau https://drive.google.com/..." class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeMatchModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                    <button type="submit" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Simpan Match</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Posisi Line-Up -->
+    <div id="lineupModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
+            <button type="button" onclick="closeLineupModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-user-pen"></i> Atur Pemain & Foto Posisi
+            </h3>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Pilih Pemain dari List Utama</label>
+                    <select id="lineupPlayerSelect" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <option value="">-- Pilih Pemain --</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Atau Upload Foto Wajah (Opsional)</label>
+                    <input type="file" id="lineupPhotoInput" accept="image/*" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2 outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-navy-dark hover:file:bg-gold-light cursor-pointer">
+                </div>
+                <input type="hidden" id="lineupSlotIndex">
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeLineupModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                    <button type="button" onclick="saveLineupSlot()" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Simpan Posisi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Riwayat -->
+    <div id="detailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-gold/50 relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeDetailModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-medal"></i> Detail Pertandingan / Turnamen
+            </h3>
+            
+            <div id="detailContent" class="space-y-3 text-xs text-slate-200">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-700 flex gap-2">
+                <button type="button" onclick="closeDetailModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        let appState = {
+            isAdmin: false,
+            matches: [],
+            activeMatchId: null
+        };
+
+        const ADMIN_PASS = "kingcff2024";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!db) {
+                document.getElementById('dbWarning').classList.remove('hidden');
+                loadFromLocalStorage();
+            } else {
+                listenToFirebase();
+            }
+        });
+
+        function listenToFirebase() {
+            db.ref('cff_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.matches && data.matches.length > 0) {
+                    appState.matches = data.matches;
+                    if (!appState.matches.some(m => m.id === appState.activeMatchId)) {
+                        appState.activeMatchId = data.matches[0].id;
+                    }
+                } else {
+                    appState.matches = [];
+                    appState.activeMatchId = null;
+                }
+                renderAll();
+            });
+        }
+
+        function saveData() {
+            if (db) {
+                db.ref('cff_data').set({
+                    matches: appState.matches,
+                    activeMatchId: appState.activeMatchId
+                });
+            } else {
+                localStorage.setItem('cff_data', JSON.stringify(appState));
+                renderAll();
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const local = localStorage.getItem('cff_data');
+            if (local) {
+                try {
+                    const parsed = JSON.parse(local);
+                    appState.matches = parsed.matches || [];
+                    appState.activeMatchId = parsed.activeMatchId || (appState.matches.length > 0 ? appState.matches[0].id : null);
+                } catch(e) {}
+            }
+            renderAll();
+        }
+
+        function renderAll() {
+            renderMatchSelector();
+            renderActiveMatch();
+            renderSquadLists();
+            renderLineupField();
+            renderStatsAndFilters();
+            renderHistory();
+            updateAdminUI();
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const input = document.getElementById('adminPasswordInput');
+            if (input.value === ADMIN_PASS) {
+                appState.isAdmin = true;
+                closeAdminModal();
+                input.value = '';
+                alert('Login Admin Berhasil!');
+                renderAll();
+            } else {
+                alert('Password Admin Salah!');
+            }
+        }
+
+        function updateAdminUI() {
+            const btnAddMatch = document.getElementById('adminAddMatchBtn');
+            const btnEditMatch = document.getElementById('adminEditMatchBtn');
+            const btnDeleteMatch = document.getElementById('adminDeleteMatchBtn');
+            const btnText = document.getElementById('adminBtnText');
+
+            if (appState.isAdmin) {
+                btnAddMatch.classList.remove('hidden');
+                if (appState.activeMatchId) {
+                    btnEditMatch.classList.remove('hidden');
+                    btnDeleteMatch.classList.remove('hidden');
+                } else {
+                    btnEditMatch.classList.add('hidden');
+                    btnDeleteMatch.classList.add('hidden');
+                }
+                btnText.innerText = "Admin (Active)";
+                btnText.classList.add('text-emerald-400');
+            } else {
+                btnAddMatch.classList.add('hidden');
+                btnEditMatch.classList.add('hidden');
+                btnDeleteMatch.classList.add('hidden');
+                btnText.innerText = "Login Admin";
+                btnText.classList.remove('text-emerald-400');
+            }
+        }
+
+        function renderMatchSelector() {
+            const container = document.getElementById('matchSelectorContainer');
+            const select = document.getElementById('activeMatchSelect');
+
+            if (appState.matches.length > 1) {
+                container.classList.remove('hidden');
+                select.innerHTML = '';
+                appState.matches.forEach(m => {
+                    const title = m.title || m.venue;
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.innerText = `${title} (${m.date})`;
+                    if (m.id === appState.activeMatchId) opt.selected = true;
+                    select.appendChild(opt);
+                });
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function changeActiveMatch(matchId) {
+            appState.activeMatchId = Number(matchId);
+            saveData();
+        }
+
+        function renderActiveMatch() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                document.getElementById('matchTitleDisplay').innerText = "Belum Ada Jadwal Main";
+                document.getElementById('matchTeamsDisplay').classList.add('hidden');
+                document.getElementById('matchVenueDisplay').innerText = "-";
+                document.getElementById('matchDateDisplay').innerText = "-";
+                document.getElementById('matchTimeDisplay').innerText = "-";
+                document.getElementById('slotCountDisplay').innerText = "0";
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dayName = days[d.getDay()] || '';
+            const formattedDate = `${dayName}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            document.getElementById('matchTitleDisplay').innerText = activeMatch.title || "Match Fun Football";
+            
+            const teamsElem = document.getElementById('matchTeamsDisplay');
+            if (activeMatch.teamList) {
+                teamsElem.innerText = `⚔️ Lawan: ${activeMatch.teamList}`;
+                teamsElem.classList.remove('hidden');
+            } else {
+                teamsElem.classList.add('hidden');
+            }
+
+            document.getElementById('matchVenueDisplay').innerText = activeMatch.venue;
+            document.getElementById('matchDateDisplay').innerText = formattedDate;
+            document.getElementById('matchTimeDisplay').innerText = activeMatch.time;
+            
+            const mainCount = Math.min((activeMatch.players || []).length, 16);
+            document.getElementById('slotCountDisplay').innerText = mainCount;
+            
+            if (activeMatch.formation) {
+                document.getElementById('formationTemplate').value = activeMatch.formation;
+            }
+        }
+
+        function handleRegisterPlayer(e) {
+            e.preventDefault();
+            if (!appState.activeMatchId) {
+                alert('Belum ada jadwal main! Login Admin untuk membuat jadwal.');
+                return;
+            }
+
+            const nameInput = document.getElementById('playerName');
+            const posInput = document.getElementById('playerPosition');
+            const name = nameInput.value.trim();
+            const pos = posInput.value;
+
+            if (!name) return;
+
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                if (!appState.matches[matchIndex].players) {
+                    appState.matches[matchIndex].players = [];
+                }
+                appState.matches[matchIndex].players.push({
+                    id: Date.now(),
+                    name: name,
+                    position: pos
+                });
+                saveData();
+                nameInput.value = '';
+            }
+        }
+
+        function renderSquadLists() {
+            const mainContainer = document.getElementById('mainSquadList');
+            const waitingContainer = document.getElementById('waitingSquadList');
+
+            mainContainer.innerHTML = '';
+            waitingContainer.innerHTML = '';
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            const players = (activeMatch && activeMatch.players) ? activeMatch.players : [];
+            const mainSquad = players.slice(0, 16);
+            const waitingSquad = players.slice(16);
+
+            document.getElementById('badgeUtama').innerText = `${mainSquad.length}/16`;
+            document.getElementById('badgeWaiting').innerText = `${waitingSquad.length} Orang`;
+
+            for (let i = 0; i < 16; i++) {
+                const player = mainSquad[i];
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between p-2.5 rounded-xl border border-gold/20 bg-navy-dark/60 text-xs";
+
+                if (player) {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full gold-gradient-bg text-navy-dark font-extrabold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-gold-light/70">${player.position}</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button type="button" onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5 opacity-40">
+                            <span class="w-6 h-6 rounded-full border border-slate-600 text-slate-400 font-semibold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <span class="italic text-slate-500">Slot Kosong</span>
+                        </div>
+                    `;
+                }
+                mainContainer.appendChild(card);
+            }
+
+            if (waitingSquad.length === 0) {
+                waitingContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-8 italic">Belum ada waiting list</div>`;
+            } else {
+                waitingSquad.forEach((player, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "flex items-center justify-between p-2.5 rounded-xl border border-amber-500/30 bg-amber-950/20 text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold text-[10px] flex items-center justify-center">${idx+17}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-amber-400/80">${player.position} (Waiting)</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button type="button" onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                    waitingContainer.appendChild(card);
+                });
+            }
+        }
+
+        function changeFormationTemplate(val) {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+            activeMatch.formation = val;
+            saveData();
+        }
+
+        function renderLineupField() {
+            const container = document.getElementById('lineupSlotsContainer');
+            container.innerHTML = '';
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            const formation = activeMatch && activeMatch.formation ? activeMatch.formation : '7v7';
+            
+            if (!activeMatch.lineup) {
+                activeMatch.lineup = {};
+            }
+
+            let rowsConfig = [];
+            if (formation === '7v7') {
+                rowsConfig = [
+                    [{pos: 'ST', label: 'Striker'}],
+                    [{pos: 'LM', label: 'Mid'}, {pos: 'RM', label: 'Mid'}],
+                    [{pos: 'LB', label: 'Def'}, {pos: 'CB', label: 'Def'}, {pos: 'RB', label: 'Def'}],
+                    [{pos: 'GK', label: 'Kiper'}]
+                ];
+            } else if (formation === '8v8') {
+                rowsConfig = [
+                    [{pos: 'ST', label: 'Striker'}],
+                    [{pos: 'LW', label: 'Mid'}, {pos: 'CM', label: 'Mid'}, {pos: 'RW', label: 'Mid'}],
+                    [{pos: 'LB', label: 'Def'}, {pos: 'CB', label: 'Def'}, {pos: 'RB', label: 'Def'}],
+                    [{pos: 'GK', label: 'Kiper'}]
+                ];
+            } else {
+                rowsConfig = [
+                    [{pos: 'LW', label: 'LW'}, {pos: 'ST', label: 'ST'}, {pos: 'RW', label: 'RW'}],
+                    [{pos: 'LCM', label: 'CM'}, {pos: 'CM', label: 'CM'}, {pos: 'RCM', label: 'CM'}],
+                    [{pos: 'LB', label: 'LB'}, {pos: 'LCB', label: 'CB'}, {pos: 'RCB', label: 'CB'}, {pos: 'RB', label: 'RB'}],
+                    [{pos: 'GK', label: 'GK'}]
+                ];
+            }
+
+            let slotIndex = 0;
+            rowsConfig.forEach((row, rIdx) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = "flex justify-around items-center w-full my-auto";
+                
+                row.forEach(item => {
+                    const currentIdx = slotIndex++;
+                    const slotData = activeMatch.lineup[currentIdx] || { name: item.label, photo: '' };
+
+                    const playerNode = document.createElement('div');
+                    playerNode.className = "flex flex-col items-center cursor-pointer group";
+                    if (appState.isAdmin) {
+                        playerNode.onclick = () => openLineupModal(currentIdx);
+                    }
+
+                    let avatarContent = `<div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-gold flex items-center justify-center text-xs font-bold text-gold shadow-lg group-hover:scale-105 transition"><i class="fa-solid fa-user"></i></div>`;
+                    if (slotData.photo) {
+                        avatarContent = `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg group-hover:scale-105 transition"><img src="${slotData.photo}" class="w-full h-full object-cover"></div>`;
+                    }
+
+                    playerNode.innerHTML = `
+                        ${avatarContent}
+                        <span class="bg-black/70 text-slate-100 text-[10px] px-2 py-0.5 rounded-full mt-1 border border-gold/30 font-semibold max-w-[80px] truncate">${slotData.name}</span>
+                    `;
+                    rowDiv.appendChild(playerNode);
+                });
+                container.appendChild(rowDiv);
+            });
+        }
+
+        function openLineupModal(slotIdx) {
+            document.getElementById('lineupSlotIndex').value = slotIdx;
+            
+            const select = document.getElementById('lineupPlayerSelect');
+            select.innerHTML = `<option value="">-- Pilih Pemain dari List --</option>`;
+            
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (activeMatch && activeMatch.players) {
+                activeMatch.players.forEach(p => {
+                    select.innerHTML += `<option value="${p.name}">${p.name} (${p.position})</option>`;
+                });
+            }
+
+            document.getElementById('lineupPhotoInput').value = '';
+            document.getElementById('lineupModal').classList.remove('hidden');
+        }
+
+        function closeLineupModal() {
+            document.getElementById('lineupModal').classList.add('hidden');
+        }
+
+        function saveLineupSlot() {
+            const slotIdx = document.getElementById('lineupSlotIndex').value;
+            const selectedName = document.getElementById('lineupPlayerSelect').value;
+            const photoInput = document.getElementById('lineupPhotoInput');
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+
+            if (!activeMatch.lineup) activeMatch.lineup = {};
+            if (!activeMatch.lineup[slotIdx]) activeMatch.lineup[slotIdx] = { name: 'Pemain', photo: '' };
+
+            if (selectedName) {
+                activeMatch.lineup[slotIdx].name = selectedName;
+            }
+
+            if (photoInput.files && photoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    activeMatch.lineup[slotIdx].photo = e.target.result;
+                    saveData();
+                    closeLineupModal();
+                };
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                saveData();
+                closeLineupModal();
+            }
+        }
+
+        function removePlayer(playerId) {
+            if (!appState.isAdmin) return;
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                appState.matches[matchIndex].players = appState.matches[matchIndex].players.filter(p => p.id !== playerId);
+                saveData();
+            }
+        }
+
+        function openMatchModal() {
+            document.getElementById('editMatchId').value = '';
+            document.getElementById('matchModalTitle').innerHTML = `<i class="fa-solid fa-calendar-plus"></i> Buat Pertandingan Baru`;
+            document.getElementById('newMatchForm').reset();
+            document.getElementById('matchModal').classList.remove('hidden');
+        }
+
+        function openEditMatchModal() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+
+            document.getElementById('editMatchId').value = activeMatch.id;
+            document.getElementById('matchModalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Pertandingan`;
+            
+            document.getElementById('inputType').value = activeMatch.type || 'fun';
+            document.getElementById('inputMatchTitle').value = activeMatch.title || '';
+            document.getElementById('inputVenue').value = activeMatch.venue || '';
+            document.getElementById('inputTeamList').value = activeMatch.teamList || '';
+            document.getElementById('inputDate').value = activeMatch.date || '';
+            document.getElementById('inputTime').value = activeMatch.time || '';
+            document.getElementById('inputScore').value = activeMatch.score !== 'Belum ada skor' ? activeMatch.score : '';
+            document.getElementById('inputHtm').value = activeMatch.htm !== '-' ? activeMatch.htm : '';
+            document.getElementById('inputPhotoLink').value = activeMatch.photoLink || '';
+
+            document.getElementById('matchModal').classList.remove('hidden');
+        }
+
+        function closeMatchModal() {
+            document.getElementById('matchModal').classList.add('hidden');
+        }
+
+        function handleSaveMatch(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editMatchId').value;
+            const type = document.getElementById('inputType').value;
+            const title = document.getElementById('inputMatchTitle').value.trim();
+            const venue = document.getElementById('inputVenue').value.trim();
+            const teamList = document.getElementById('inputTeamList').value.trim();
+            const date = document.getElementById('inputDate').value;
+            const time = document.getElementById('inputTime').value.trim();
+            const score = document.getElementById('inputScore').value.trim();
+            const htm = document.getElementById('inputHtm').value.trim();
+            const photoLink = document.getElementById('inputPhotoLink').value.trim();
+
+            if (editId) {
+                // Mode Edit
+                const matchIndex = appState.matches.findIndex(m => m.id == editId);
+                if (matchIndex !== -1) {
+                    appState.matches[matchIndex].type = type;
+                    appState.matches[matchIndex].title = title;
+                    appState.matches[matchIndex].venue = venue;
+                    appState.matches[matchIndex].teamList = teamList;
+                    appState.matches[matchIndex].date = date;
+                    appState.matches[matchIndex].time = time;
+                    appState.matches[matchIndex].score = score || 'Belum ada skor';
+                    appState.matches[matchIndex].htm = htm || '-';
+                    appState.matches[matchIndex].photoLink = photoLink || '';
+                }
+            } else {
+                // Mode Tambah Baru
+                const newMatch = {
+                    id: Date.now(),
+                    type: type,
+                    title: title,
+                    venue: venue,
+                    teamList: teamList,
+                    date: date,
+                    time: time,
+                    score: score || 'Belum ada skor',
+                    htm: htm || '-',
+                    photoLink: photoLink || '',
+                    formation: '7v7',
+                    players: [],
+                    lineup: {}
+                };
+                appState.matches.unshift(newMatch);
+                appState.activeMatchId = newMatch.id;
+            }
+
+            saveData();
+            closeMatchModal();
+            document.getElementById('newMatchForm').reset();
+        }
+
+        function deleteActiveMatch() {
+            if (!appState.isAdmin || !appState.activeMatchId) return;
+            if (!confirm('Yakin ingin menghapus pertandingan terpilih ini? Seluruh data pendaftar & riwayat match ini akan hilang.')) return;
+
+            appState.matches = appState.matches.filter(m => m.id !== appState.activeMatchId);
+            appState.activeMatchId = appState.matches.length > 0 ? appState.matches[0].id : null;
+            saveData();
+        }
+
+        function copyListToWhatsApp() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                alert('Belum ada jadwal main.');
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dateStr = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            let text = `*CUMA FUN FOOTBALL FC - LIST MAIN*\n`;
+            text += `------------------------------------\n`;
+            text += `⚽ *Match:* ${activeMatch.title || 'Fun Football'}\n`;
+            text += `🏟️ *Venue:* ${activeMatch.venue}\n`;
+            if (activeMatch.teamList) {
+                text += `⚔️ *Lawan:* ${activeMatch.teamList}\n`;
+            }
+            text += `📅 *Hari/Tgl:* ${dateStr}\n`;
+            text += `⏰ *Jam:* ${activeMatch.time}\n`;
+            if (activeMatch.htm && activeMatch.htm !== '-') {
+                text += `💰 *HTM:* ${activeMatch.htm}\n`;
+            }
+            if (activeMatch.score && activeMatch.score !== 'Belum ada skor') {
+                text += `🏆 *Skor:* ${activeMatch.score}\n`;
+            }
+            if (activeMatch.photoLink) {
+                text += `📸 *Foto/Dokumentasi:* ${activeMatch.photoLink}\n`;
+            }
+            text += `------------------------------------\n\n`;
+
+            text += `*LIST PEMAIN UTAMA (16 SLOT):*\n`;
+            const players = activeMatch.players || [];
+            const mainSquad = players.slice(0, 16);
+            for (let i = 0; i < 16; i++) {
+                if (mainSquad[i]) {
+                    text += `${i+1}. ${mainSquad[i].name} (${mainSquad[i].position})\n`;
+                } else {
+                    text += `${i+1}.\n`;
+                }
+            }
+
+            const waitingSquad = players.slice(16);
+            if (waitingSquad.length > 0) {
+                text += `\n*WAITING LIST:*\n`;
+                waitingSquad.forEach((p, idx) => {
+                    text += `${idx+17}. ${p.name} (${p.position})\n`;
+                });
+            }
+
+            text += `\nYuk amankan slot kalian! 🔥⚽`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('List berhasil disalin! Silakan Paste di WhatsApp.');
+            });
+        }
+
+        function renderStatsAndFilters() {
+            const venueSelect = document.getElementById('filterVenue');
+            const teamSelect = document.getElementById('filterTeam');
+            const yearSelect = document.getElementById('filterYear');
+
+            const venues = [...new Set(appState.matches.map(m => m.venue))];
+
+            let allTeamsSet = new Set();
+            appState.matches.forEach(m => {
+                if (m.teamList) {
+                    m.teamList.split(',').forEach(t => {
+                        let cleanTeam = t.trim();
+                        if (cleanTeam) allTeamsSet.add(cleanTeam);
+                    });
+                }
+            });
+            const teamListArray = [...allTeamsSet];
+
+            const years = [...new Set(appState.matches.map(m => new Date(m.date).getFullYear()))];
+
+            const currentVenue = venueSelect.value;
+            const currentTeam = teamSelect.value;
+            const currentYear = yearSelect.value;
+
+            venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
+            venues.forEach(v => {
+                venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
+            });
+            venueSelect.value = currentVenue || "ALL";
+
+            teamSelect.innerHTML = `<option value="ALL">Semua Tim Lawan</option>`;
+            teamListArray.forEach(t => {
+                teamSelect.innerHTML += `<option value="${t}">${t}</option>`;
+            });
+            teamSelect.value = currentTeam || "ALL";
+
+            yearSelect.innerHTML = `<option value="ALL">Semua Tahun</option>`;
+            years.forEach(y => {
+                if (!isNaN(y)) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+            });
+            yearSelect.value = currentYear || "ALL";
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const vFilter = document.getElementById('filterVenue').value;
+            const tFilter = document.getElementById('filterTeam').value;
+            const mFilter = document.getElementById('filterMonth').value;
+            const yFilter = document.getElementById('filterYear').value;
+
+            const filtered = appState.matches.filter(m => {
+                const d = new Date(m.date);
+                const matchVenue = vFilter === "ALL" || m.venue === vFilter;
+                
+                let matchTeam = true;
+                if (tFilter !== "ALL") {
+                    let teamsInMatch = [];
+                    if (m.teamList) {
+                        teamsInMatch = m.teamList.split(',').map(t => t.trim());
+                    }
+                    matchTeam = teamsInMatch.includes(tFilter);
+                }
+
+                const matchMonth = mFilter === "ALL" || d.getMonth().toString() === mFilter;
+                const matchYear = yFilter === "ALL" || d.getFullYear().toString() === yFilter;
+                return matchVenue && matchTeam && matchMonth && matchYear;
+            });
+
+            document.getElementById('statMatchCount').innerText = filtered.length;
+
+            const venueCounts = {};
+            filtered.forEach(m => {
+                venueCounts[m.venue] = (venueCounts[m.venue] || 0) + 1;
+            });
+
+            let topV = "-";
+            let topC = 0;
+            for (const [v, c] of Object.entries(venueCounts)) {
+                if (c > topC) {
+                    topC = c;
+                    topV = v;
+                }
+            }
+
+            document.getElementById('statTopVenue').innerText = topV !== "-" ? `${topV} (${topC}x main)` : "-";
+        }
+
+        function renderHistory() {
+            const historyContainer = document.getElementById('historyMatchList');
+            historyContainer.innerHTML = '';
+
+            if (appState.matches.length === 0) {
+                historyContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-4">Belum ada riwayat pertandingan</div>`;
+                return;
+            }
+
+            appState.matches.forEach(m => {
+                const d = new Date(m.date);
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const formattedDate = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+                const card = document.createElement('div');
+                card.className = "p-3 rounded-xl bg-navy-dark/70 border border-gold/20 text-xs space-y-2 cursor-pointer hover:border-gold transition";
+                card.onclick = () => showMatchDetail(m.id);
+
+                const headerLabel = m.title || "Match Fun Football";
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-gold">${headerLabel}</h4>
+                        <span class="text-[10px] bg-gold/10 text-gold px-2 py-0.5 rounded-full border border-gold/30 font-semibold">${m.score}</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400 text-[11px]">
+                        <span>🏟️ ${m.venue}</span>
+                        <span>📅 ${formattedDate}</span>
+                    </div>
+                    ${m.teamList ? `<div class="text-[10px] text-slate-300">⚔️ Lawan: ${m.teamList}</div>` : ''}
+                `;
+                historyContainer.appendChild(card);
+            });
+        }
+
+        function showMatchDetail(matchId) {
+            const match = appState.matches.find(m => m.id === matchId);
+            if (!match) return;
+
+            const d = new Date(match.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const formattedDate = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            let content = `
+                <div class="space-y-2">
+                    <p><strong>Judul Match:</strong> ${match.title || '-'}</p>
+                    <p><strong>Tipe Laga:</strong> ${match.type === 'trofeo' ? 'Trofeo / Turnamen' : 'Fun Football / Friendly'}</p>
+                    <p><strong>Venue / Lapangan:</strong> ${match.venue}</p>
+                    ${match.teamList ? `<p><strong>Daftar Tim Lawan:</strong> ${match.teamList}</p>` : ''}
+                    <p><strong>Hari, Tanggal:</strong> ${formattedDate} (${match.time})</p>
+                    <p><strong>Skor / Hasil:</strong> <span class="text-gold font-bold">${match.score}</span></p>
+                    <p><strong>HTM / Patungan:</strong> ${match.htm}</p>
+                    ${match.photoLink ? `<p><strong>Dokumentasi:</strong> <a href="${match.photoLink}" target="_blank" class="text-gold underline">Buka Link Foto / Gdrive</a></p>` : ''}
+                    <hr class="border-slate-700 my-2">
+                    <p class="font-bold text-gold">Daftar Pemain Hadir (${(match.players || []).length} Orang):</p>
+                    <div class="max-h-40 overflow-y-auto space-y-1 bg-navy/40 p-2 rounded-lg">
+            `;
+
+            if (match.players && match.players.length > 0) {
+                match.players.forEach((p, idx) => {
+                    content += `<div class="text-[11px]">${idx+1}. ${p.name} (${p.position})</div>`;
+                });
+            } else {
+                content += `<div class="italic text-slate-500">Tidak ada data pemain</div>`;
+            }
+
+            content += `</div></div>`;
+
+            if (appState.isAdmin) {
+                content += `
+                    <div class="mt-4 pt-3 border-t border-slate-700 flex justify-between">
+                        <button type="button" onclick="closeDetailModal(); appState.activeMatchId = ${match.id}; renderAll(); openEditMatchModal();" class="bg-blue-900/80 hover:bg-blue-700 text-blue-200 text-xs px-3 py-1.5 rounded-lg"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit Match Ini</button>
+                        <button type="button" onclick="deleteMatchFromDetail(${match.id})" class="bg-rose-900/80 hover:bg-rose-700 text-rose-200 text-xs px-3 py-1.5 rounded-lg"><i class="fa-solid fa-trash-can mr-1"></i> Hapus</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById('detailContent').innerHTML = content;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function deleteMatchFromDetail(matchId) {
+            if (!confirm('Yakin ingin menghapus riwayat pertandingan ini?')) return;
+            appState.matches = appState.matches.filter(m => m.id !== matchId);
+            if (appState.activeMatchId === matchId) {
+                appState.activeMatchId = appState.matches.length > 0 ? appState.matches[0].id : null;
+            }
+            saveData();
+            closeDetailModal();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
