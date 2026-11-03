@@ -231,11 +231,18 @@
                     </h2>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                <!-- 4 Kolom Filter: Lapangan, Tim Lawan, Bulan, Tahun -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim Lawan / Venue</label>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
                         <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
-                            <option value="ALL">Semua Tim / Venue</option>
+                            <option value="ALL">Semua Lapangan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim Lawan</label>
+                        <select id="filterTeam" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Tim Lawan</option>
                         </select>
                     </div>
                     <div>
@@ -256,7 +263,7 @@
                             <option value="11">Desember</option>
                         </select>
                     </div>
-                    <div class="col-span-2 md:col-span-1">
+                    <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
                         <select id="filterYear" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
                             <option value="ALL">Semua Tahun</option>
@@ -270,7 +277,7 @@
                         <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
                     </div>
                     <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lawan / Venue Sering Main</span>
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
                         <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
                     </div>
                 </div>
@@ -791,9 +798,13 @@
 
         function renderStatsAndFilters() {
             const venueSelect = document.getElementById('filterVenue');
+            const teamSelect = document.getElementById('filterTeam');
             const yearSelect = document.getElementById('filterYear');
 
-            // Ekstrak semua tim lawan dengan memecah string berbasis koma
+            // List Lapangan unik
+            const venues = [...new Set(appState.matches.map(m => m.venue))];
+
+            // List Tim Lawan unik (dipisah koma)
             let allTeamsSet = new Set();
             appState.matches.forEach(m => {
                 if (m.teamList) {
@@ -808,14 +819,24 @@
             const years = [...new Set(appState.matches.map(m => new Date(m.date).getFullYear()))];
 
             const currentVenue = venueSelect.value;
+            const currentTeam = teamSelect.value;
             const currentYear = yearSelect.value;
 
-            venueSelect.innerHTML = `<option value="ALL">Semua Tim Lawan</option>`;
-            teamListArray.forEach(t => {
-                venueSelect.innerHTML += `<option value="${t}">${t}</option>`;
+            // Render Venue Dropdown
+            venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
+            venues.forEach(v => {
+                venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
             });
             venueSelect.value = currentVenue || "ALL";
 
+            // Render Team Dropdown
+            teamSelect.innerHTML = `<option value="ALL">Semua Tim Lawan</option>`;
+            teamListArray.forEach(t => {
+                teamSelect.innerHTML += `<option value="${t}">${t}</option>`;
+            });
+            teamSelect.value = currentTeam || "ALL";
+
+            // Render Year Dropdown
             yearSelect.innerHTML = `<option value="ALL">Semua Tahun</option>`;
             years.forEach(y => {
                 if (!isNaN(y)) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
@@ -827,50 +848,46 @@
 
         function applyFilters() {
             const vFilter = document.getElementById('filterVenue').value;
+            const tFilter = document.getElementById('filterTeam').value;
             const mFilter = document.getElementById('filterMonth').value;
             const yFilter = document.getElementById('filterYear').value;
 
             const filtered = appState.matches.filter(m => {
                 const d = new Date(m.date);
                 
+                const matchVenue = vFilter === "ALL" || m.venue === vFilter;
+                
                 let matchTeam = true;
-                if (vFilter !== "ALL") {
+                if (tFilter !== "ALL") {
                     let teamsInMatch = [];
                     if (m.teamList) {
                         teamsInMatch = m.teamList.split(',').map(t => t.trim());
                     }
-                    matchTeam = teamsInMatch.includes(vFilter);
+                    matchTeam = teamsInMatch.includes(tFilter);
                 }
 
                 const matchMonth = mFilter === "ALL" || d.getMonth().toString() === mFilter;
                 const matchYear = yFilter === "ALL" || d.getFullYear().toString() === yFilter;
-                return matchTeam && matchMonth && matchYear;
+                return matchVenue && matchTeam && matchMonth && matchYear;
             });
 
             document.getElementById('statMatchCount').innerText = filtered.length;
 
-            const teamCounts = {};
+            const venueCounts = {};
             filtered.forEach(m => {
-                if (m.teamList) {
-                    m.teamList.split(',').forEach(t => {
-                        let clean = t.trim();
-                        if (clean) {
-                            teamCounts[clean] = (teamCounts[clean] || 0) + 1;
-                        }
-                    });
-                }
+                venueCounts[m.venue] = (venueCounts[m.venue] || 0) + 1;
             });
 
-            let topT = "-";
+            let topV = "-";
             let topC = 0;
-            for (const [t, c] of Object.entries(teamCounts)) {
+            for (const [v, c] of Object.entries(venueCounts)) {
                 if (c > topC) {
                     topC = c;
-                    topT = t;
+                    topV = v;
                 }
             }
 
-            document.getElementById('statTopVenue').innerText = topT !== "-" ? `${topT} (${topC}x main)` : "-";
+            document.getElementById('statTopVenue').innerText = topV !== "-" ? `${topV} (${topC}x main)` : "-";
         }
 
         function renderHistory() {
