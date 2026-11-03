@@ -68,6 +68,12 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(212, 175, 55, 0.25);
         }
+        .football-field {
+            background: linear-gradient(to bottom, #1e4d2b, #13331b);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-navy-dark text-slate-100 font-sans min-h-screen pb-24 md:pb-8 bg-stripes">
@@ -198,6 +204,36 @@
                 </div>
             </div>
 
+            <!-- Section Line-Up Lapangan Interaktif -->
+            <div class="glass-card rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-2 border-b border-gold/20 pb-2">
+                    <h3 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chess-board text-gold"></i> Line-Up Lapangan & Formasi
+                    </h3>
+                    <div class="flex items-center space-x-2 w-full md:w-auto">
+                        <label class="text-[10px] text-slate-300 font-medium">Format:</label>
+                        <select id="formationTemplate" onchange="changeFormationTemplate(this.value)" class="bg-navy border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none flex-1 md:w-36">
+                            <option value="7v7">7 vs 7 (3-2-1)</option>
+                            <option value="8v8">8 vs 8 (3-3-1)</option>
+                            <option value="11v11">11 vs 11 (4-3-3)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tampilan Lapangan Bola -->
+                <div id="footballFieldContainer" class="football-field w-full h-[460px] rounded-2xl p-4 flex flex-col justify-between shadow-inner relative">
+                    <!-- Garis Tengah Lapangan -->
+                    <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 pointer-events-none"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white/20 rounded-full pointer-events-none"></div>
+                    
+                    <!-- Area Titik Posisi Pemain (Akan di-render via JS sesuai template) -->
+                    <div id="lineupSlotsContainer" class="w-full h-full flex flex-col justify-between relative z-10 py-2">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-400 italic text-center">* Admin dapat mengklik lingkaran pemain di lapangan untuk memilih nama dari list atau upload foto wajah.</p>
+            </div>
+
             <div class="pt-2">
                 <button type="button" onclick="copyListToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
                     <i class="fa-brands fa-whatsapp text-base"></i>
@@ -215,7 +251,7 @@
                     </h2>
                 </div>
 
-                <!-- 4 Kotak Filter Terpisah: Lapangan, Tim Lawan, Bulan, Tahun -->
+                <!-- 4 Kotak Filter Terpisah -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
@@ -388,6 +424,37 @@
         </div>
     </div>
 
+    <!-- Modal Edit Posisi Line-Up -->
+    <div id="lineupModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
+            <button type="button" onclick="closeLineupModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-user-pen"></i> Atur Pemain & Foto Posisi
+            </h3>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Pilih Pemain dari List Utama</label>
+                    <select id="lineupPlayerSelect" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <option value="">-- Pilih Pemain --</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Atau Upload Foto Wajah (Opsional)</label>
+                    <input type="file" id="lineupPhotoInput" accept="image/*" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2 outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-navy-dark hover:file:bg-gold-light cursor-pointer">
+                </div>
+                <input type="hidden" id="lineupSlotIndex">
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeLineupModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                    <button type="button" onclick="saveLineupSlot()" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Simpan Posisi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Detail Riwayat -->
     <div id="detailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-gold/50 relative max-h-[90vh] overflow-y-auto">
@@ -471,6 +538,7 @@
             renderMatchSelector();
             renderActiveMatch();
             renderSquadLists();
+            renderLineupField();
             renderStatsAndFilters();
             renderHistory();
             updateAdminUI();
@@ -577,6 +645,10 @@
             
             const mainCount = Math.min((activeMatch.players || []).length, 16);
             document.getElementById('slotCountDisplay').innerText = mainCount;
+            
+            if (activeMatch.formation) {
+                document.getElementById('formationTemplate').value = activeMatch.formation;
+            }
         }
 
         function handleRegisterPlayer(e) {
@@ -671,6 +743,134 @@
             }
         }
 
+        // === FITUR LINE-UP & FORMASI ===
+        function changeFormationTemplate(val) {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+            activeMatch.formation = val;
+            saveData();
+        }
+
+        function renderLineupField() {
+            const container = document.getElementById('lineupSlotsContainer');
+            container.innerHTML = '';
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            const formation = activeMatch && activeMatch.formation ? activeMatch.formation : '7v7';
+            
+            if (!activeMatch.lineup) {
+                activeMatch.lineup = {};
+            }
+
+            // Tentukan susunan baris berdasarkan template formasi
+            let rowsConfig = [];
+            if (formation === '7v7') {
+                // 3-2-1 + Kiper (Total 7)
+                rowsConfig = [
+                    [{pos: 'ST', label: 'Striker'}],
+                    [{pos: 'LM', label: 'Mid'}, {pos: 'RM', label: 'Mid'}],
+                    [{pos: 'LB', label: 'Def'}, {pos: 'CB', label: 'Def'}, {pos: 'RB', label: 'Def'}],
+                    [{pos: 'GK', label: 'Kiper'}]
+                ];
+            } else if (formation === '8v8') {
+                // 3-3-1 + Kiper (Total 8)
+                rowsConfig = [
+                    [{pos: 'ST', label: 'Striker'}],
+                    [{pos: 'LW', label: 'Mid'}, {pos: 'CM', label: 'Mid'}, {pos: 'RW', label: 'Mid'}],
+                    [{pos: 'LB', label: 'Def'}, {pos: 'CB', label: 'Def'}, {pos: 'RB', label: 'Def'}],
+                    [{pos: 'GK', label: 'Kiper'}]
+                ];
+            } else {
+                // 11v11 (4-3-3)
+                rowsConfig = [
+                    [{pos: 'LW', label: 'LW'}, {pos: 'ST', label: 'ST'}, {pos: 'RW', label: 'RW'}],
+                    [{pos: 'LCM', label: 'CM'}, {pos: 'CM', label: 'CM'}, {pos: 'RCM', label: 'CM'}],
+                    [{pos: 'LB', label: 'LB'}, {pos: 'LCB', label: 'CB'}, {pos: 'RCB', label: 'CB'}, {pos: 'RB', label: 'RB'}],
+                    [{pos: 'GK', label: 'GK'}]
+                ];
+            }
+
+            let slotIndex = 0;
+            rowsConfig.forEach((row, rIdx) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = "flex justify-around items-center w-full my-auto";
+                
+                row.forEach(item => {
+                    const currentIdx = slotIndex++;
+                    const slotData = activeMatch.lineup[currentIdx] || { name: item.label, photo: '' };
+
+                    const playerNode = document.createElement('div');
+                    playerNode.className = "flex flex-col items-center cursor-pointer group";
+                    if (appState.isAdmin) {
+                        playerNode.onclick = () => openLineupModal(currentIdx);
+                    }
+
+                    let avatarContent = `<div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-gold flex items-center justify-center text-xs font-bold text-gold shadow-lg group-hover:scale-105 transition"><i class="fa-solid fa-user"></i></div>`;
+                    if (slotData.photo) {
+                        avatarContent = `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg group-hover:scale-105 transition"><img src="${slotData.photo}" class="w-full h-full object-cover"></div>`;
+                    }
+
+                    playerNode.innerHTML = `
+                        ${avatarContent}
+                        <span class="bg-black/70 text-slate-100 text-[10px] px-2 py-0.5 rounded-full mt-1 border border-gold/30 font-semibold max-w-[80px] truncate">${slotData.name}</span>
+                    `;
+                    rowDiv.appendChild(playerNode);
+                });
+                container.appendChild(rowDiv);
+            });
+        }
+
+        function openLineupModal(slotIdx) {
+            document.getElementById('lineupSlotIndex').value = slotIdx;
+            
+            // Isi dropdown dengan pemain yang sudah terdaftar
+            const select = document.getElementById('lineupPlayerSelect');
+            select.innerHTML = `<option value="">-- Pilih Pemain dari List --</option>`;
+            
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (activeMatch && activeMatch.players) {
+                activeMatch.players.forEach(p => {
+                    select.innerHTML += `<option value="${p.name}">${p.name} (${p.position})</option>`;
+                });
+            }
+
+            document.getElementById('lineupPhotoInput').value = '';
+            document.getElementById('lineupModal').classList.remove('hidden');
+        }
+
+        function closeLineupModal() {
+            document.getElementById('lineupModal').classList.add('hidden');
+        }
+
+        function saveLineupSlot() {
+            const slotIdx = document.getElementById('lineupSlotIndex').value;
+            const selectedName = document.getElementById('lineupPlayerSelect').value;
+            const photoInput = document.getElementById('lineupPhotoInput');
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) return;
+
+            if (!activeMatch.lineup) activeMatch.lineup = {};
+            if (!activeMatch.lineup[slotIdx]) activeMatch.lineup[slotIdx] = { name: 'Pemain', photo: '' };
+
+            if (selectedName) {
+                activeMatch.lineup[slotIdx].name = selectedName;
+            }
+
+            if (photoInput.files && photoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    activeMatch.lineup[slotIdx].photo = e.target.result;
+                    saveData();
+                    closeLineupModal();
+                };
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                saveData();
+                closeLineupModal();
+            }
+        }
+
         function removePlayer(playerId) {
             if (!appState.isAdmin) return;
             const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
@@ -710,7 +910,9 @@
                 score: score || 'Belum ada skor',
                 htm: htm || '-',
                 photoLink: photoLink || '',
-                players: []
+                formation: '7v7',
+                players: [],
+                lineup: {}
             };
 
             appState.matches.unshift(newMatch);
@@ -785,10 +987,8 @@
             const teamSelect = document.getElementById('filterTeam');
             const yearSelect = document.getElementById('filterYear');
 
-            // List Lapangan unik
             const venues = [...new Set(appState.matches.map(m => m.venue))];
 
-            // List Tim Lawan unik (dipisah koma)
             let allTeamsSet = new Set();
             appState.matches.forEach(m => {
                 if (m.teamList) {
@@ -806,21 +1006,18 @@
             const currentTeam = teamSelect.value;
             const currentYear = yearSelect.value;
 
-            // Render Venue Dropdown
             venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
             venues.forEach(v => {
                 venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
             });
             venueSelect.value = currentVenue || "ALL";
 
-            // Render Team Dropdown
             teamSelect.innerHTML = `<option value="ALL">Semua Tim Lawan</option>`;
             teamListArray.forEach(t => {
                 teamSelect.innerHTML += `<option value="${t}">${t}</option>`;
             });
             teamSelect.value = currentTeam || "ALL";
 
-            // Render Year Dropdown
             yearSelect.innerHTML = `<option value="ALL">Semua Tahun</option>`;
             years.forEach(y => {
                 if (!isNaN(y)) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
@@ -838,7 +1035,6 @@
 
             const filtered = appState.matches.filter(m => {
                 const d = new Date(m.date);
-                
                 const matchVenue = vFilter === "ALL" || m.venue === vFilter;
                 
                 let matchTeam = true;
