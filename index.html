@@ -103,7 +103,7 @@
             </div>
 
             <div>
-                <button type="button" id="adminLoginBtn" class="px-3 py-1.5 rounded-lg border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition flex items-center space-x-1 cursor-pointer">
+                <button type="button" onclick="openAdminModal()" id="adminLoginBtn" class="px-3 py-1.5 rounded-lg border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition flex items-center space-x-1 cursor-pointer">
                     <i class="fa-solid fa-lock"></i>
                     <span id="adminBtnText">Login Admin</span>
                 </button>
@@ -127,7 +127,7 @@
                         <span class="inline-block bg-gold/20 text-gold border border-gold/40 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase mb-1">Jadwal Pertandingan Terdekat</span>
                         <h2 id="matchVenueDisplay" class="text-lg font-extrabold text-slate-100">Belum ada jadwal main</h2>
                     </div>
-                    <button id="adminAddMatchBtn" type="button" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1 cursor-pointer">
+                    <button id="adminAddMatchBtn" type="button" onclick="openMatchModal()" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1 cursor-pointer">
                         <i class="fa-solid fa-plus"></i> + Buat Match
                     </button>
                 </div>
@@ -153,7 +153,7 @@
                 <h3 class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-user-plus"></i> Form Pendaftaran Pemain
                 </h3>
-                <form id="playerForm" class="flex flex-col md:flex-row gap-2">
+                <form id="playerForm" onsubmit="handleRegisterPlayer(event)" class="flex flex-col md:flex-row gap-2">
                     <input type="text" id="playerName" placeholder="Nama Lengkap / Panggilan" required class="flex-1 bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
                     <select id="playerPosition" class="bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
                         <option value="Pemain">Pemain (Any)</option>
@@ -192,7 +192,7 @@
             </div>
 
             <div class="pt-2">
-                <button type="button" id="copyWaBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                <button type="button" onclick="copyListToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
                     <i class="fa-brands fa-whatsapp text-base"></i>
                     <span>Salin List Rapi ke WhatsApp</span>
                 </button>
@@ -211,13 +211,13 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
-                        <select id="filterVenue" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                        <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
                             <option value="ALL">Semua Lapangan</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Bulan</label>
-                        <select id="filterMonth" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                        <select id="filterMonth" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
                             <option value="ALL">Semua Bulan</option>
                             <option value="0">Januari</option>
                             <option value="1">Februari</option>
@@ -235,7 +235,7 @@
                     </div>
                     <div class="col-span-2 md:col-span-1">
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
-                        <select id="filterYear" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                        <select id="filterYear" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
                             <option value="ALL">Semua Tahun</option>
                         </select>
                     </div>
@@ -261,7 +261,7 @@
                     <h2 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
                         <i class="fa-solid fa-history"></i> Riwayat Pertandingan & Turnamen
                     </h2>
-                    <span id="adminMatchStatusInfo" class="text-[10px] text-slate-400">Klik riwayat untuk detail</span>
+                    <span class="text-[10px] text-slate-400">Klik riwayat untuk detail</span>
                 </div>
                 <div id="historyMatchList" class="space-y-3"></div>
             </div>
@@ -288,7 +288,7 @@
     <!-- Modal Admin Login -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
-            <button type="button" id="closeAdminModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-1 flex items-center gap-2">
@@ -297,8 +297,8 @@
             <p class="text-xs text-slate-400 mb-4">Masukkan password untuk akses penuh.</p>
             <input type="password" id="adminPasswordInput" placeholder="Password Admin" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none mb-4">
             <div class="flex gap-2">
-                <button type="button" id="cancelAdminBtn" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
-                <button type="button" id="submitAdminBtn" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Login</button>
+                <button type="button" onclick="closeAdminModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                <button type="button" onclick="verifyAdminPassword()" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Login</button>
             </div>
         </div>
     </div>
@@ -306,14 +306,14 @@
     <!-- Modal Admin Add Match -->
     <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card rounded-2xl p-6 w-full max-w-lg border border-gold/50 relative max-h-[90vh] overflow-y-auto">
-            <button type="button" id="closeMatchModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+            <button type="button" onclick="closeMatchModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
                 <i class="fa-solid fa-calendar-plus"></i> Buat / Selesaikan Jadwal Main
             </h3>
             
-            <form id="newMatchForm" class="space-y-3">
+            <form id="newMatchForm" onsubmit="handleSaveNewMatch(event)" class="space-y-3">
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Tipe Laga</label>
@@ -324,4 +324,564 @@
                     </div>
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
-                        <input type="text" id="inputVenue" placeholder="Contoh: Sentul Otopark"
+                        <input type="text" id="inputVenue" placeholder="Contoh: Sentul Otopark" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div id="trofeoFields" class="hidden space-y-3 p-3 bg-navy/40 border border-gold/30 rounded-xl">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Turnamen / Trofeo</label>
+                        <input type="text" id="inputTournamentName" placeholder="Contoh: Trofeo CFF Cup 2026" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim-tim Lawan (Pisahkan dengan koma)</label>
+                        <input type="text" id="inputOpponents" placeholder="Contoh: Tim A, Tim B, King CFF" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tanggal</label>
+                        <input type="date" id="inputDate" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Jam Main</label>
+                        <input type="text" id="inputTime" placeholder="16:00 - 18:00 WIB" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Skor / Hasil Akhir</label>
+                        <input type="text" id="inputScore" placeholder="Contoh: Menang 3-1 / Seri 2-2" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">HTM / Patungan (Rp)</label>
+                        <input type="text" id="inputHtm" placeholder="Contoh: Rp 35.000" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Link Foto Dokumentasi (Gdrive / IG)</label>
+                    <input type="url" id="inputPhotoLink" placeholder="https://instagram.com/... atau https://drive.google.com/..." class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeMatchModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                    <button type="submit" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Simpan Jadwal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Riwayat -->
+    <div id="detailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-gold/50 relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeDetailModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-medal"></i> Detail Pertandingan / Turnamen
+            </h3>
+            
+            <div id="detailContent" class="space-y-3 text-xs text-slate-200">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-700 flex gap-2">
+                <button type="button" onclick="closeDetailModal()" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        let appState = {
+            isAdmin: false,
+            matches: [],
+            activeMatchId: null
+        };
+
+        const ADMIN_PASS = "kingcff2024";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!db) {
+                document.getElementById('dbWarning').classList.remove('hidden');
+                loadFromLocalStorage();
+            } else {
+                listenToFirebase();
+            }
+        });
+
+        function listenToFirebase() {
+            db.ref('cff_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.matches) {
+                    appState.matches = data.matches;
+                    appState.activeMatchId = data.activeMatchId || (data.matches.length > 0 ? data.matches[0].id : null);
+                } else {
+                    appState.matches = [];
+                    appState.activeMatchId = null;
+                }
+                renderAll();
+            });
+        }
+
+        function saveData() {
+            if (db) {
+                db.ref('cff_data').set({
+                    matches: appState.matches,
+                    activeMatchId: appState.activeMatchId
+                });
+            } else {
+                localStorage.setItem('cff_data', JSON.stringify(appState));
+                renderAll();
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const local = localStorage.getItem('cff_data');
+            if (local) {
+                try {
+                    const parsed = JSON.parse(local);
+                    appState.matches = parsed.matches || [];
+                    appState.activeMatchId = parsed.activeMatchId || null;
+                } catch(e) {}
+            }
+            renderAll();
+        }
+
+        function renderAll() {
+            renderActiveMatch();
+            renderSquadLists();
+            renderStatsAndFilters();
+            renderHistory();
+            updateAdminUI();
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const input = document.getElementById('adminPasswordInput');
+            if (input.value === ADMIN_PASS) {
+                appState.isAdmin = true;
+                closeAdminModal();
+                input.value = '';
+                alert('Login Admin Berhasil!');
+                renderAll();
+            } else {
+                alert('Password Admin Salah!');
+            }
+        }
+
+        function updateAdminUI() {
+            const btnAddMatch = document.getElementById('adminAddMatchBtn');
+            const btnText = document.getElementById('adminBtnText');
+
+            if (appState.isAdmin) {
+                btnAddMatch.classList.remove('hidden');
+                btnText.innerText = "Admin (Active)";
+                btnText.classList.add('text-emerald-400');
+            } else {
+                btnAddMatch.classList.add('hidden');
+                btnText.innerText = "Login Admin";
+                btnText.classList.remove('text-emerald-400');
+            }
+        }
+
+        function toggleMatchTypeFields() {
+            const type = document.getElementById('inputType').value;
+            const trofeoDiv = document.getElementById('trofeoFields');
+            if (type === 'trofeo') {
+                trofeoDiv.classList.remove('hidden');
+            } else {
+                trofeoDiv.classList.add('hidden');
+            }
+        }
+
+        function renderActiveMatch() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                document.getElementById('matchVenueDisplay').innerText = "Belum Ada Jadwal Main";
+                document.getElementById('matchDateDisplay').innerText = "-";
+                document.getElementById('matchTimeDisplay').innerText = "-";
+                document.getElementById('slotCountDisplay').innerText = "0";
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dayName = days[d.getDay()] || '';
+            const formattedDate = `${dayName}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            const titleDisplay = activeMatch.type === 'trofeo' && activeMatch.tournamentName 
+                ? `${activeMatch.tournamentName} - ${activeMatch.venue}` 
+                : activeMatch.venue;
+
+            document.getElementById('matchVenueDisplay').innerText = titleDisplay;
+            document.getElementById('matchDateDisplay').innerText = formattedDate;
+            document.getElementById('matchTimeDisplay').innerText = activeMatch.time;
+            
+            const mainCount = Math.min((activeMatch.players || []).length, 16);
+            document.getElementById('slotCountDisplay').innerText = mainCount;
+        }
+
+        function handleRegisterPlayer(e) {
+            e.preventDefault();
+            if (!appState.activeMatchId) {
+                alert('Belum ada jadwal main! Login Admin untuk membuat jadwal.');
+                return;
+            }
+
+            const nameInput = document.getElementById('playerName');
+            const posInput = document.getElementById('playerPosition');
+            const name = nameInput.value.trim();
+            const pos = posInput.value;
+
+            if (!name) return;
+
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                if (!appState.matches[matchIndex].players) {
+                    appState.matches[matchIndex].players = [];
+                }
+                appState.matches[matchIndex].players.push({
+                    id: Date.now(),
+                    name: name,
+                    position: pos
+                });
+                saveData();
+                nameInput.value = '';
+            }
+        }
+
+        function renderSquadLists() {
+            const mainContainer = document.getElementById('mainSquadList');
+            const waitingContainer = document.getElementById('waitingSquadList');
+
+            mainContainer.innerHTML = '';
+            waitingContainer.innerHTML = '';
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            const players = (activeMatch && activeMatch.players) ? activeMatch.players : [];
+            const mainSquad = players.slice(0, 16);
+            const waitingSquad = players.slice(16);
+
+            document.getElementById('badgeUtama').innerText = `${mainSquad.length}/16`;
+            document.getElementById('badgeWaiting').innerText = `${waitingSquad.length} Orang`;
+
+            for (let i = 0; i < 16; i++) {
+                const player = mainSquad[i];
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between p-2.5 rounded-xl border border-gold/20 bg-navy-dark/60 text-xs";
+
+                if (player) {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full gold-gradient-bg text-navy-dark font-extrabold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-gold-light/70">${player.position}</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button type="button" onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5 opacity-40">
+                            <span class="w-6 h-6 rounded-full border border-slate-600 text-slate-400 font-semibold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <span class="italic text-slate-500">Slot Kosong</span>
+                        </div>
+                    `;
+                }
+                mainContainer.appendChild(card);
+            }
+
+            if (waitingSquad.length === 0) {
+                waitingContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-8 italic">Belum ada waiting list</div>`;
+            } else {
+                waitingSquad.forEach((player, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "flex items-center justify-between p-2.5 rounded-xl border border-amber-500/30 bg-amber-950/20 text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold text-[10px] flex items-center justify-center">${idx+17}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-amber-400/80">${player.position} (Waiting)</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button type="button" onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                    waitingContainer.appendChild(card);
+                });
+            }
+        }
+
+        function removePlayer(playerId) {
+            if (!appState.isAdmin) return;
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                appState.matches[matchIndex].players = appState.matches[matchIndex].players.filter(p => p.id !== playerId);
+                saveData();
+            }
+        }
+
+        function openMatchModal() {
+            document.getElementById('matchModal').classList.remove('hidden');
+        }
+        function closeMatchModal() {
+            document.getElementById('matchModal').classList.add('hidden');
+        }
+
+        function handleSaveNewMatch(e) {
+            e.preventDefault();
+            const type = document.getElementById('inputType').value;
+            const venue = document.getElementById('inputVenue').value.trim();
+            const tournamentName = document.getElementById('inputTournamentName').value.trim();
+            const opponents = document.getElementById('inputOpponents').value.trim();
+            const date = document.getElementById('inputDate').value;
+            const time = document.getElementById('inputTime').value.trim();
+            const score = document.getElementById('inputScore').value.trim();
+            const htm = document.getElementById('inputHtm').value.trim();
+            const photoLink = document.getElementById('inputPhotoLink').value.trim();
+
+            const newMatch = {
+                id: Date.now(),
+                type: type,
+                venue: venue,
+                tournamentName: tournamentName,
+                opponents: opponents,
+                date: date,
+                time: time,
+                score: score || 'Belum ada skor',
+                htm: htm || '-',
+                photoLink: photoLink || '',
+                players: []
+            };
+
+            appState.matches.unshift(newMatch);
+            appState.activeMatchId = newMatch.id;
+            saveData();
+            closeMatchModal();
+            document.getElementById('newMatchForm').reset();
+            toggleMatchTypeFields();
+        }
+
+        function copyListToWhatsApp() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                alert('Belum ada jadwal main.');
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dateStr = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            let text = `*CUMA FUN FOOTBALL FC - LIST MAIN*\n`;
+            text += `------------------------------------\n`;
+            if (activeMatch.type === 'trofeo' && activeMatch.tournamentName) {
+                text += `🏆 *Turnamen:* ${activeMatch.tournamentName}\n`;
+            }
+            text += `🏟️ *Venue:* ${activeMatch.venue}\n`;
+            text += `📅 *Hari/Tgl:* ${dateStr}\n`;
+            text += `⏰ *Jam:* ${activeMatch.time}\n`;
+            if (activeMatch.htm && activeMatch.htm !== '-') {
+                text += `💰 *HTM:* ${activeMatch.htm}\n`;
+            }
+            text += `------------------------------------\n\n`;
+
+            text += `*LIST PEMAIN UTAMA (16 SLOT):*\n`;
+            const players = activeMatch.players || [];
+            const mainSquad = players.slice(0, 16);
+            for (let i = 0; i < 16; i++) {
+                if (mainSquad[i]) {
+                    text += `${i+1}. ${mainSquad[i].name} (${mainSquad[i].position})\n`;
+                } else {
+                    text += `${i+1}.\n`;
+                }
+            }
+
+            const waitingSquad = players.slice(16);
+            if (waitingSquad.length > 0) {
+                text += `\n*WAITING LIST:*\n`;
+                waitingSquad.forEach((p, idx) => {
+                    text += `${idx+17}. ${p.name} (${p.position})\n`;
+                });
+            }
+
+            text += `\nYuk amankan slot kalian! 🔥⚽`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('List berhasil disalin! Silakan Paste di WhatsApp.');
+            });
+        }
+
+        function renderStatsAndFilters() {
+            const venueSelect = document.getElementById('filterVenue');
+            const yearSelect = document.getElementById('filterYear');
+
+            const venues = [...new Set(appState.matches.map(m => m.venue))];
+            const years = [...new Set(appState.matches.map(m => new Date(m.date).getFullYear()))];
+
+            const currentVenue = venueSelect.value;
+            const currentYear = yearSelect.value;
+
+            venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
+            venues.forEach(v => {
+                venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
+            });
+            venueSelect.value = currentVenue || "ALL";
+
+            yearSelect.innerHTML = `<option value="ALL">Semua Tahun</option>`;
+            years.forEach(y => {
+                if (!isNaN(y)) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+            });
+            yearSelect.value = currentYear || "ALL";
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const vFilter = document.getElementById('filterVenue').value;
+            const mFilter = document.getElementById('filterMonth').value;
+            const yFilter = document.getElementById('filterYear').value;
+
+            const filtered = appState.matches.filter(m => {
+                const d = new Date(m.date);
+                const matchVenue = vFilter === "ALL" || m.venue === vFilter;
+                const matchMonth = mFilter === "ALL" || d.getMonth().toString() === mFilter;
+                const matchYear = yFilter === "ALL" || d.getFullYear().toString() === yFilter;
+                return matchVenue && matchMonth && matchYear;
+            });
+
+            document.getElementById('statMatchCount').innerText = filtered.length;
+
+            const venueCounts = {};
+            filtered.forEach(m => {
+                venueCounts[m.venue] = (venueCounts[m.venue] || 0) + 1;
+            });
+
+            let topV = "-";
+            let topC = 0;
+            for (const [v, c] of Object.entries(venueCounts)) {
+                if (c > topC) {
+                    topC = c;
+                    topV = v;
+                }
+            }
+
+            document.getElementById('statTopVenue').innerText = topV !== "-" ? `${topV} (${topC}x)` : "-";
+        }
+
+        function renderHistory() {
+            const historyContainer = document.getElementById('historyMatchList');
+            historyContainer.innerHTML = '';
+
+            if (appState.matches.length === 0) {
+                historyContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-4">Belum ada riwayat pertandingan</div>`;
+                return;
+            }
+
+            appState.matches.forEach(m => {
+                const d = new Date(m.date);
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const formattedDate = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+                const card = document.createElement('div');
+                card.className = "p-3 rounded-xl bg-navy-dark/70 border border-gold/20 text-xs space-y-2 cursor-pointer hover:border-gold transition";
+                card.onclick = () => showMatchDetail(m.id);
+
+                let headerLabel = m.venue;
+                if (m.type === 'trofeo' && m.tournamentName) {
+                    headerLabel = `🏆 ${m.tournamentName} (${m.venue})`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-gold">${headerLabel}</h4>
+                        <span class="text-[10px] bg-gold/10 text-gold px-2 py-0.5 rounded-full border border-gold/30 font-semibold">${m.score}</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400 text-[11px]">
+                        <span>📅 ${formattedDate}</span>
+                        <span>💰 HTM: ${m.htm}</span>
+                    </div>
+                    ${m.opponents ? `<div class="text-[10px] text-slate-300">⚔️ Lawan: ${m.opponents}</div>` : ''}
+                `;
+                historyContainer.appendChild(card);
+            });
+        }
+
+        function showMatchDetail(matchId) {
+            const match = appState.matches.find(m => m.id === matchId);
+            if (!match) return;
+
+            const d = new Date(match.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const formattedDate = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            let content = `
+                <div class="space-y-2">
+                    <p><strong>Tipe Laga:</strong> ${match.type === 'trofeo' ? 'Trofeo / Turnamen' : 'Fun Football / Friendly'}</p>
+                    ${match.tournamentName ? `<p><strong>Nama Turnamen:</strong> ${match.tournamentName}</p>` : ''}
+                    <p><strong>Venue / Lapangan:</strong> ${match.venue}</p>
+                    <p><strong>Hari, Tanggal:</strong> ${formattedDate} (${match.time})</p>
+                    <p><strong>Skor / Hasil:</strong> <span class="text-gold font-bold">${match.score}</span></p>
+                    <p><strong>HTM / Patungan:</strong> ${match.htm}</p>
+                    ${match.opponents ? `<p><strong>Tim Lawan:</strong> ${match.opponents}</p>` : ''}
+                    ${match.photoLink ? `<p><strong>Dokumentasi:</strong> <a href="${match.photoLink}" target="_blank" class="text-gold underline">Buka Link Foto / Gdrive</a></p>` : ''}
+                    <hr class="border-slate-700 my-2">
+                    <p class="font-bold text-gold">Daftar Pemain Hadir (${(match.players || []).length} Orang):</p>
+                    <div class="max-h-40 overflow-y-auto space-y-1 bg-navy/40 p-2 rounded-lg">
+            `;
+
+            if (match.players && match.players.length > 0) {
+                match.players.forEach((p, idx) => {
+                    content += `<div class="text-[11px]">${idx+1}. ${p.name} (${p.position})</div>`;
+                });
+            } else {
+                content += `<div class="italic text-slate-500">Tidak ada data pemain</div>`;
+            }
+
+            content += `</div></div>`;
+
+            if (appState.isAdmin) {
+                content += `
+                    <div class="mt-4 pt-3 border-t border-slate-700 flex justify-end">
+                        <button type="button" onclick="deleteMatch(${match.id})" class="bg-rose-900/80 hover:bg-rose-700 text-rose-200 text-xs px-3 py-1.5 rounded-lg">Hapus Riwayat Ini</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById('detailContent').innerHTML = content;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function deleteMatch(matchId) {
+            if (!confirm('Yakin ingin menghapus riwayat pertandingan ini?')) return;
+            appState.matches = appState.matches.filter(m => m.id !== matchId);
+            if (appState.activeMatchId === matchId) {
+                appState.activeMatchId = appState.matches.length > 0 ? appState.matches[0].id : null;
+            }
+            saveData();
+            closeDetailModal();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
