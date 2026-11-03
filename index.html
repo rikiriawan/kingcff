@@ -8,13 +8,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDKs (Compat version for simple CDN integration) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
     <script>
         // === KONFIGURASI FIREBASE DATABASE ===
-        // Ganti URL di bawah ini dengan URL Realtime Database dari Firebase Console Anda!
+        // Ganti URL di bawah ini dengan URL Realtime Database dari Firebase Console Anda jika sudah punya!
         const DATABASE_URL = "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com/";
 
         let db = null;
@@ -30,8 +30,7 @@
                         gold: {
                             light: '#F3E5AB',
                             DEFAULT: '#D4AF37',
-                            dark: '#AA7C11',
-                            metallic: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)'
+                            dark: '#AA7C11'
                         },
                         navy: {
                             light: '#1B2A4A',
@@ -54,9 +53,6 @@
             background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 70%, #FBF5B7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        .gold-border-gradient {
-            border-image: linear-gradient(135deg, #BF953F, #FCF6BA, #AA771C) 1;
         }
         .bg-stripes {
             background-color: #050E1A;
@@ -83,18 +79,7 @@
             <div class="flex items-center space-x-3">
                 <!-- Visual Logo SVG -->
                 <div class="w-12 h-12 relative flex-shrink-0">
-                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]">
-                        <path d="M100 10 L175 40 L175 120 L100 185 L25 120 L25 40 Z" fill="#0D1B2A" stroke="url(#goldGrad)" stroke-width="6"/>
-                        <path d="M100 22 L163 47 L163 113 L100 170 L37 113 L37 47 Z" fill="#0A1424" stroke="#D4AF37" stroke-width="2"/>
-                        <path d="M70 20 L80 5 L100 15 L120 5 L130 20 Z" fill="url(#goldGrad)"/>
-                        <circle cx="100" cy="100" r="45" fill="none" stroke="url(#goldGrad)" stroke-width="4"/>
-                        <circle cx="100" cy="100" r="32" fill="#050E1A" stroke="#D4AF37" stroke-width="2"/>
-                        <polygon points="100,75 110,85 105,98 95,98 90,85" fill="#FCF6BA"/>
-                        <line x1="100" y1="75" x2="100" y2="68" stroke="#D4AF37" stroke-width="2"/>
-                        <line x1="110" y1="85" x2="117" y2="88" stroke="#D4AF37" stroke-width="2"/>
-                        <line x1="105" y1="98" x2="111" y2="105" stroke="#D4AF37" stroke-width="2"/>
-                        <line x1="95" y1="98" x2="89" y2="105" stroke="#D4AF37" stroke-width="2"/>
-                        <line x1="90" y1="85" x2="83" y2="88" stroke="#D4AF37" stroke-width="2"/>
+                    <svg viewBox="0 0 200 220" class="w-full h-full drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]">
                         <defs>
                             <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#BF953F" />
@@ -103,19 +88,29 @@
                                 <stop offset="100%" stop-color="#AA771C" />
                             </linearGradient>
                         </defs>
+                        <!-- 3 Bintang Atas -->
+                        <polygon points="100,5 103,15 113,15 105,21 108,31 100,25 92,31 95,21 87,15 97,15" fill="url(#goldGrad)" />
+                        <polygon points="55,30 57,38 65,38 59,43 61,50 55,46 49,50 51,43 45,38 53,38" fill="url(#goldGrad)" />
+                        <polygon points="145,30 147,38 155,38 149,43 151,50 145,46 139,50 141,43 135,38 143,38" fill="url(#goldGrad)" />
+                        <!-- Perisai & Bola -->
+                        <path d="M100 45 L175 75 L175 145 L100 205 L25 145 L25 75 Z" fill="#0D1B2A" stroke="url(#goldGrad)" stroke-width="5"/>
+                        <path d="M100 53 L167 80 L167 140 L100 193 L33 140 L33 80 Z" fill="#0A1424" stroke="#D4AF37" stroke-width="1.5"/>
+                        <circle cx="100" cy="125" r="40" fill="#050E1A" stroke="url(#goldGrad)" stroke-width="3"/>
+                        <polygon points="100,105 110,113 106,124 94,124 90,113" fill="#FCF6BA"/>
+                        <text x="100" y="180" font-size="12" font-weight="extrabold" fill="url(#goldGrad)" text-anchor="middle">CFF FC</text>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-lg md:text-xl font-extrabold tracking-wider gold-gradient-text uppercase">KING C.F.F. FAMILY</h1>
-                    <p class="text-[10px] md:text-xs text-gold-light/70 font-semibold tracking-widest uppercase">Cuma Fun Football FC 2024</p>
+                    <h1 class="text-base md:text-xl font-extrabold tracking-wider gold-gradient-text uppercase">CUMA FUN FOOTBALL</h1>
+                    <p class="text-[10px] md:text-xs text-gold-light/70 font-semibold tracking-widest uppercase">Est. 2024</p>
                 </div>
             </div>
 
-            <!-- Admin Login Button / Status Indicator -->
-            <div id="adminControls">
-                <button onclick="toggleAdminLoginModal()" id="adminLoginBtn" class="px-3 py-1.5 rounded-lg border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition flex items-center space-x-1">
+            <!-- Admin Login Button -->
+            <div>
+                <button type="button" id="adminLoginBtn" class="px-3 py-1.5 rounded-lg border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition flex items-center space-x-1 cursor-pointer">
                     <i class="fa-solid fa-lock"></i>
-                    <span>Admin</span>
+                    <span id="adminBtnText">Login Admin</span>
                 </button>
             </div>
         </div>
@@ -127,71 +122,11 @@
         <!-- Banner Info Warning jika Database Belum Diset -->
         <div id="dbWarning" class="hidden mb-4 p-3 bg-amber-900/50 border border-amber-500 rounded-lg text-amber-200 text-xs text-center">
             <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
-            Database URL belum terpasang di file HTML. Data masih tersimpan sementara di local browser HP Anda.
+            Database Online belum dikonfigurasi. Data tersimpan lokal di browser ini.
         </div>
 
-        <!-- Section 1: Dashboard Stats & Filters -->
-        <section id="sec-stats" class="space-y-4">
-            <div class="glass-card rounded-2xl p-4 shadow-xl">
-                <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
-                    <h2 class="text-sm font-bold text-gold uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie"></i> Statistik & Filter Pertandingan
-                    </h2>
-                    <span class="text-[10px] text-slate-400">Real-time DB</span>
-                </div>
-
-                <!-- Filter Form -->
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
-                    <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
-                        <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
-                            <option value="ALL">Semua Lapangan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Bulan</label>
-                        <select id="filterMonth" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
-                            <option value="ALL">Semua Bulan</option>
-                            <option value="0">Januari</option>
-                            <option value="1">Februari</option>
-                            <option value="2">Maret</option>
-                            <option value="3">April</option>
-                            <option value="4">Mei</option>
-                            <option value="5">Juni</option>
-                            <option value="6">Juli</option>
-                            <option value="7">Agustus</option>
-                            <option value="8">September</option>
-                            <option value="9">Oktober</option>
-                            <option value="10">November</option>
-                            <option value="11">Desember</option>
-                        </select>
-                    </div>
-                    <div class="col-span-2 md:col-span-1">
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
-                        <select id="filterYear" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-gold outline-none">
-                            <option value="ALL">Semua Tahun</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Stats Summary Badges -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Total Main (Filtered)</span>
-                        <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
-                        <span class="text-[9px] text-slate-400 block mt-0.5">Kali Pertandingan</span>
-                    </div>
-                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
-                        <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
-                        <span id="statTopVenueCount" class="text-[9px] text-gold block">0 match</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 2: Active Match Session & Player Registration -->
-        <section id="sec-match" class="space-y-4 mt-6">
+        <!-- Section 1: Active Match Session & Player Registration -->
+        <section id="sec-match" class="space-y-4">
             <!-- Active Match Header Card -->
             <div class="glass-card rounded-2xl p-4 shadow-xl border-l-4 border-l-gold relative overflow-hidden">
                 <div class="flex justify-between items-start mb-2">
@@ -199,8 +134,8 @@
                         <span class="inline-block bg-gold/20 text-gold border border-gold/40 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase mb-1">Jadwal Pertandingan Terdekat</span>
                         <h2 id="matchVenueDisplay" class="text-lg font-extrabold text-slate-100">Belum ada jadwal main</h2>
                     </div>
-                    <button id="adminAddMatchBtn" onclick="openMatchModal()" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Admin: Buat Match
+                    <button id="adminAddMatchBtn" type="button" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i> + Buat Match
                     </button>
                 </div>
 
@@ -225,7 +160,7 @@
                 <h3 class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-user-plus"></i> Form Pendaftaran Pemain
                 </h3>
-                <form id="playerForm" onsubmit="handleRegisterPlayer(event)" class="flex flex-col md:flex-row gap-2">
+                <form id="playerForm" class="flex flex-col md:flex-row gap-2">
                     <input type="text" id="playerName" placeholder="Nama Lengkap / Panggilan" required class="flex-1 bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
                     <select id="playerPosition" class="bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none">
                         <option value="Pemain">Pemain (Any)</option>
@@ -234,7 +169,7 @@
                         <option value="Gelandang">Gelandang (MF)</option>
                         <option value="Striker">Striker (FW)</option>
                     </select>
-                    <button type="submit" class="gold-gradient-bg text-navy-dark font-extrabold text-xs px-5 py-3 rounded-xl hover:opacity-95 transition shadow-lg flex items-center justify-center gap-2">
+                    <button type="submit" class="gold-gradient-bg text-navy-dark font-extrabold text-xs px-5 py-3 rounded-xl hover:opacity-95 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-check"></i> Daftar Main
                     </button>
                 </form>
@@ -247,13 +182,13 @@
                 <div class="glass-card rounded-2xl p-4 shadow-xl">
                     <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
                         <h3 class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-[#0D1B2A] fa-shield-halved text-gold"></i> List Pemain Utama (Max 16)
+                            <i class="fa-solid fa-shield-halved text-gold"></i> List Pemain Utama (Max 16)
                         </h3>
                         <span id="badgeUtama" class="bg-emerald-900/60 text-emerald-400 border border-emerald-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0/16</span>
                     </div>
 
                     <div id="mainSquadList" class="space-y-2 min-h-[160px]">
-                        <!-- Player items will be dynamically injected here -->
+                        <!-- Player items -->
                     </div>
                 </div>
 
@@ -267,7 +202,7 @@
                     </div>
 
                     <div id="waitingSquadList" class="space-y-2 min-h-[160px]">
-                        <!-- Waiting list items will be dynamically injected here -->
+                        <!-- Waiting list items -->
                     </div>
                 </div>
 
@@ -275,18 +210,75 @@
 
             <!-- Share to WA Button -->
             <div class="pt-2">
-                <button onclick="copyListToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                <button type="button" id="copyWaBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
                     <i class="fa-brands fa-whatsapp text-base"></i>
                     <span>Salin List Rapi ke WhatsApp</span>
                 </button>
             </div>
         </section>
 
+        <!-- Section 2: Dashboard Stats & Filters -->
+        <section id="sec-stats" class="space-y-4 hidden">
+            <div class="glass-card rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3 border-b border-gold/20 pb-2">
+                    <h2 class="text-sm font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i> Statistik & Filter
+                    </h2>
+                </div>
+
+                <!-- Filter Form -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
+                        <select id="filterVenue" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Lapangan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Bulan</label>
+                        <select id="filterMonth" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Bulan</option>
+                            <option value="0">Januari</option>
+                            <option value="1">Februari</option>
+                            <option value="2">Maret</option>
+                            <option value="3">April</option>
+                            <option value="4">Mei</option>
+                            <option value="5">Juni</option>
+                            <option value="6">Juli</option>
+                            <option value="7">Agustus</option>
+                            <option value="8">September</option>
+                            <option value="9">Oktober</option>
+                            <option value="10">November</option>
+                            <option value="11">Desember</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 md:col-span-1">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tahun</label>
+                        <select id="filterYear" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
+                            <option value="ALL">Semua Tahun</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Stats Summary Badges -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Total Main (Filtered)</span>
+                        <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
+                    </div>
+                    <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
+                        <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Section 3: History & Records -->
-        <section id="sec-history" class="space-y-4 mt-6">
+        <section id="sec-history" class="space-y-4 hidden">
             <div class="glass-card rounded-2xl p-4 shadow-xl">
                 <h2 class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-history"></i> Riwayat Pertandingan Klub
+                    <i class="fa-solid fa-history"></i> Riwayat Pertandingan
                 </h2>
                 <div id="historyMatchList" class="space-y-3">
                     <!-- History items injected here -->
@@ -298,15 +290,15 @@
 
     <!-- Mobile Bottom Navigation Bar -->
     <nav class="fixed bottom-0 left-0 right-0 bg-navy/95 backdrop-blur-md border-t border-gold/30 z-30 px-6 py-2 flex justify-around md:hidden">
-        <button onclick="switchTab('sec-match')" class="nav-btn text-gold flex flex-col items-center space-y-1">
+        <button type="button" onclick="switchTab('sec-match')" class="nav-btn text-gold flex flex-col items-center space-y-1 cursor-pointer">
             <i class="fa-solid fa-calendar-day text-base"></i>
             <span class="text-[10px] font-semibold">Jadwal</span>
         </button>
-        <button onclick="switchTab('sec-stats')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1">
+        <button type="button" onclick="switchTab('sec-stats')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1 cursor-pointer">
             <i class="fa-solid fa-chart-simple text-base"></i>
             <span class="text-[10px] font-semibold">Statistik</span>
         </button>
-        <button onclick="switchTab('sec-history')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1">
+        <button type="button" onclick="switchTab('sec-history')" class="nav-btn text-slate-400 flex flex-col items-center space-y-1 cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-base"></i>
             <span class="text-[10px] font-semibold">Riwayat</span>
         </button>
@@ -315,7 +307,7 @@
     <!-- Modal Admin Login -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-gold/50 relative">
-            <button onclick="toggleAdminLoginModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+            <button type="button" id="closeAdminModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-1 flex items-center gap-2">
@@ -324,3 +316,474 @@
             <p class="text-xs text-slate-400 mb-4">Masukkan password untuk mendapat akses edit & tambah jadwal.</p>
             
             <input type="password" id="adminPasswordInput" placeholder="Password Admin" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-3 focus:ring-1 focus:ring-gold outline-none mb-4">
+            
+            <div class="flex gap-2">
+                <button type="button" id="cancelAdminBtn" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                <button type="button" id="submitAdminBtn" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Add Match -->
+    <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-gold/50 relative">
+            <button type="button" id="closeMatchModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="text-sm font-bold text-gold uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-plus"></i> Buat Jadwal Main Baru
+            </h3>
+            
+            <form id="newMatchForm" class="space-y-3">
+                <div>
+                    <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
+                    <input type="text" id="inputVenue" placeholder="Contoh: Sentul Otopark / Field A" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none focus:border-gold">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tanggal</label>
+                        <input type="date" id="inputDate" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Jam Main</label>
+                        <input type="text" id="inputTime" placeholder="16:00 - 18:00 WIB" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none focus:border-gold">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" id="cancelMatchBtn" class="flex-1 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Batal</button>
+                    <button type="submit" class="flex-1 gold-gradient-bg text-navy-dark text-xs font-extrabold py-2.5 rounded-xl">Simpan Jadwal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // State
+        let appState = {
+            isAdmin: false,
+            matches: [],
+            activeMatchId: null
+        };
+
+        const ADMIN_PASS = "kingcff2024";
+
+        // DOM Ready Initializer
+        document.addEventListener('DOMContentLoaded', () => {
+            initEvents();
+            if (!db) {
+                document.getElementById('dbWarning').classList.remove('hidden');
+                loadFromLocalStorage();
+            } else {
+                listenToFirebase();
+            }
+        });
+
+        // Event Binding
+        function initEvents() {
+            document.getElementById('adminLoginBtn').addEventListener('click', toggleAdminModal);
+            document.getElementById('closeAdminModalBtn').addEventListener('click', toggleAdminModal);
+            document.getElementById('cancelAdminBtn').addEventListener('click', toggleAdminModal);
+            document.getElementById('submitAdminBtn').addEventListener('click', verifyAdminPassword);
+
+            document.getElementById('adminAddMatchBtn').addEventListener('click', openMatchModal);
+            document.getElementById('closeMatchModalBtn').addEventListener('click', closeMatchModal);
+            document.getElementById('cancelMatchBtn').addEventListener('click', closeMatchModal);
+            document.getElementById('newMatchForm').addEventListener('submit', handleSaveNewMatch);
+
+            document.getElementById('playerForm').addEventListener('submit', handleRegisterPlayer);
+            document.getElementById('copyWaBtn').addEventListener('click', copyListToWhatsApp);
+
+            document.getElementById('filterVenue').addEventListener('change', applyFilters);
+            document.getElementById('filterMonth').addEventListener('change', applyFilters);
+            document.getElementById('filterYear').addEventListener('change', applyFilters);
+        }
+
+        // Firebase Sync
+        function listenToFirebase() {
+            db.ref('cff_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.matches) {
+                    appState.matches = data.matches;
+                    appState.activeMatchId = data.activeMatchId || (data.matches.length > 0 ? data.matches[0].id : null);
+                } else {
+                    appState.matches = [];
+                    appState.activeMatchId = null;
+                }
+                renderAll();
+            });
+        }
+
+        function saveData() {
+            if (db) {
+                db.ref('cff_data').set({
+                    matches: appState.matches,
+                    activeMatchId: appState.activeMatchId
+                });
+            } else {
+                localStorage.setItem('cff_data', JSON.stringify(appState));
+                renderAll();
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const local = localStorage.getItem('cff_data');
+            if (local) {
+                try {
+                    const parsed = JSON.parse(local);
+                    appState.matches = parsed.matches || [];
+                    appState.activeMatchId = parsed.activeMatchId || null;
+                } catch(e) {}
+            }
+            renderAll();
+        }
+
+        // Render Master
+        function renderAll() {
+            renderActiveMatch();
+            renderSquadLists();
+            renderStatsAndFilters();
+            renderHistory();
+            updateAdminUI();
+        }
+
+        // Admin Actions
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const input = document.getElementById('adminPasswordInput');
+            if (input.value === ADMIN_PASS) {
+                appState.isAdmin = true;
+                toggleAdminModal();
+                input.value = '';
+                alert('Login Admin Berhasil!');
+                renderAll();
+            } else {
+                alert('Password Admin Salah!');
+            }
+        }
+
+        function updateAdminUI() {
+            const btnAddMatch = document.getElementById('adminAddMatchBtn');
+            const btnText = document.getElementById('adminBtnText');
+
+            if (appState.isAdmin) {
+                btnAddMatch.classList.remove('hidden');
+                btnText.innerText = "Admin (Active)";
+                btnText.classList.add('text-emerald-400');
+            } else {
+                btnAddMatch.classList.add('hidden');
+                btnText.innerText = "Login Admin";
+                btnText.classList.remove('text-emerald-400');
+            }
+        }
+
+        // Active Match UI
+        function renderActiveMatch() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                document.getElementById('matchVenueDisplay').innerText = "Belum Ada Jadwal Main";
+                document.getElementById('matchDateDisplay').innerText = "-";
+                document.getElementById('matchTimeDisplay').innerText = "-";
+                document.getElementById('slotCountDisplay').innerText = "0";
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dayName = days[d.getDay()] || '';
+            const formattedDate = `${dayName}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            document.getElementById('matchVenueDisplay').innerText = activeMatch.venue;
+            document.getElementById('matchDateDisplay').innerText = formattedDate;
+            document.getElementById('matchTimeDisplay').innerText = activeMatch.time;
+            
+            const mainCount = Math.min((activeMatch.players || []).length, 16);
+            document.getElementById('slotCountDisplay').innerText = mainCount;
+        }
+
+        // Register Player
+        function handleRegisterPlayer(e) {
+            e.preventDefault();
+            if (!appState.activeMatchId) {
+                alert('Belum ada jadwal main! Login Admin untuk membuat jadwal baru.');
+                return;
+            }
+
+            const nameInput = document.getElementById('playerName');
+            const posInput = document.getElementById('playerPosition');
+
+            const name = nameInput.value.trim();
+            const pos = posInput.value;
+
+            if (!name) return;
+
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                if (!appState.matches[matchIndex].players) {
+                    appState.matches[matchIndex].players = [];
+                }
+                appState.matches[matchIndex].players.push({
+                    id: Date.now(),
+                    name: name,
+                    position: pos
+                });
+                saveData();
+                nameInput.value = '';
+            }
+        }
+
+        // Render Squad Lists
+        function renderSquadLists() {
+            const mainContainer = document.getElementById('mainSquadList');
+            const waitingContainer = document.getElementById('waitingSquadList');
+
+            mainContainer.innerHTML = '';
+            waitingContainer.innerHTML = '';
+
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            const players = (activeMatch && activeMatch.players) ? activeMatch.players : [];
+            const mainSquad = players.slice(0, 16);
+            const waitingSquad = players.slice(16);
+
+            document.getElementById('badgeUtama').innerText = `${mainSquad.length}/16`;
+            document.getElementById('badgeWaiting').innerText = `${waitingSquad.length} Orang`;
+
+            // Render 16 Slots
+            for (let i = 0; i < 16; i++) {
+                const player = mainSquad[i];
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between p-2.5 rounded-xl border border-gold/20 bg-navy-dark/60 text-xs";
+
+                if (player) {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full gold-gradient-bg text-navy-dark font-extrabold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-gold-light/70">${player.position}</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5 opacity-40">
+                            <span class="w-6 h-6 rounded-full border border-slate-600 text-slate-400 font-semibold text-[10px] flex items-center justify-center">${i+1}</span>
+                            <span class="italic text-slate-500">Slot Kosong</span>
+                        </div>
+                    `;
+                }
+                mainContainer.appendChild(card);
+            }
+
+            // Waiting List
+            if (waitingSquad.length === 0) {
+                waitingContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-8 italic">Belum ada waiting list</div>`;
+            } else {
+                waitingSquad.forEach((player, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "flex items-center justify-between p-2.5 rounded-xl border border-amber-500/30 bg-amber-950/20 text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold text-[10px] flex items-center justify-center">${idx+17}</span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${player.name}</span>
+                                <span class="text-[9px] text-amber-400/80">${player.position} (Waiting)</span>
+                            </div>
+                        </div>
+                        ${appState.isAdmin ? `<button onclick="removePlayer(${player.id})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    `;
+                    waitingContainer.appendChild(card);
+                });
+            }
+        }
+
+        function removePlayer(playerId) {
+            if (!appState.isAdmin) return;
+            const matchIndex = appState.matches.findIndex(m => m.id === appState.activeMatchId);
+            if (matchIndex !== -1) {
+                appState.matches[matchIndex].players = appState.matches[matchIndex].players.filter(p => p.id !== playerId);
+                saveData();
+            }
+        }
+
+        // Match Modals
+        function openMatchModal() {
+            document.getElementById('matchModal').classList.remove('hidden');
+        }
+        function closeMatchModal() {
+            document.getElementById('matchModal').classList.add('hidden');
+        }
+
+        function handleSaveNewMatch(e) {
+            e.preventDefault();
+            const venue = document.getElementById('inputVenue').value.trim();
+            const date = document.getElementById('inputDate').value;
+            const time = document.getElementById('inputTime').value.trim();
+
+            const newMatch = {
+                id: Date.now(),
+                venue: venue,
+                date: date,
+                time: time,
+                players: []
+            };
+
+            appState.matches.unshift(newMatch);
+            appState.activeMatchId = newMatch.id;
+            saveData();
+            closeMatchModal();
+        }
+
+        // Copy WA
+        function copyListToWhatsApp() {
+            const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
+            if (!activeMatch) {
+                alert('Belum ada jadwal main yang aktif.');
+                return;
+            }
+
+            const d = new Date(activeMatch.date);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dateStr = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            let text = `*CUMA FUN FOOTBALL FC - LIST MAIN*\n`;
+            text += `------------------------------------\n`;
+            text += `🏟️ *Lapangan:* ${activeMatch.venue}\n`;
+            text += `📅 *Hari/Tgl:* ${dateStr}\n`;
+            text += `⏰ *Jam:* ${activeMatch.time}\n`;
+            text += `------------------------------------\n\n`;
+
+            text += `*LIST PEMAIN UTAMA (16 SLOT):*\n`;
+            const players = activeMatch.players || [];
+            const mainSquad = players.slice(0, 16);
+            for (let i = 0; i < 16; i++) {
+                if (mainSquad[i]) {
+                    text += `${i+1}. ${mainSquad[i].name} (${mainSquad[i].position})\n`;
+                } else {
+                    text += `${i+1}.\n`;
+                }
+            }
+
+            const waitingSquad = players.slice(16);
+            if (waitingSquad.length > 0) {
+                text += `\n*WAITING LIST:*\n`;
+                waitingSquad.forEach((p, idx) => {
+                    text += `${idx+17}. ${p.name} (${p.position})\n`;
+                });
+            }
+
+            text += `\nYuk amankan slot kalian! 🔥⚽`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('List berhasil disalin! Tinggal Paste di Grup WhatsApp.');
+            });
+        }
+
+        // Stats & Filter
+        function renderStatsAndFilters() {
+            const venueSelect = document.getElementById('filterVenue');
+            const yearSelect = document.getElementById('filterYear');
+
+            const venues = [...new Set(appState.matches.map(m => m.venue))];
+            const years = [...new Set(appState.matches.map(m => new Date(m.date).getFullYear()))];
+
+            const currentVenue = venueSelect.value;
+            const currentYear = yearSelect.value;
+
+            venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
+            venues.forEach(v => {
+                venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
+            });
+            venueSelect.value = currentVenue || "ALL";
+
+            yearSelect.innerHTML = `<option value="ALL">Semua Tahun</option>`;
+            years.forEach(y => {
+                if (!isNaN(y)) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+            });
+            yearSelect.value = currentYear || "ALL";
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const vFilter = document.getElementById('filterVenue').value;
+            const mFilter = document.getElementById('filterMonth').value;
+            const yFilter = document.getElementById('filterYear').value;
+
+            const filtered = appState.matches.filter(m => {
+                const d = new Date(m.date);
+                const matchVenue = vFilter === "ALL" || m.venue === vFilter;
+                const matchMonth = mFilter === "ALL" || d.getMonth().toString() === mFilter;
+                const matchYear = yFilter === "ALL" || d.getFullYear().toString() === yFilter;
+                return matchVenue && matchMonth && matchYear;
+            });
+
+            document.getElementById('statMatchCount').innerText = filtered.length;
+
+            const venueCounts = {};
+            filtered.forEach(m => {
+                venueCounts[m.venue] = (venueCounts[m.venue] || 0) + 1;
+            });
+
+            let topV = "-";
+            let topC = 0;
+            for (const [v, c] of Object.entries(venueCounts)) {
+                if (c > topC) {
+                    topC = c;
+                    topV = v;
+                }
+            }
+
+            document.getElementById('statTopVenue').innerText = topV !== "-" ? `${topV} (${topC}x)` : "-";
+        }
+
+        // History UI
+        function renderHistory() {
+            const historyContainer = document.getElementById('historyMatchList');
+            historyContainer.innerHTML = '';
+
+            if (appState.matches.length === 0) {
+                historyContainer.innerHTML = `<div class="text-center text-slate-500 text-xs py-4">Belum ada riwayat pertandingan</div>`;
+                return;
+            }
+
+            appState.matches.forEach(m => {
+                const d = new Date(m.date);
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const formattedDate = `${days[d.getDay()] || ''}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between p-3 rounded-xl bg-navy-dark/70 border border-gold/20 text-xs";
+                card.innerHTML = `
+                    <div>
+                        <h4 class="font-bold text-slate-200">${m.venue}</h4>
+                        <span class="text-[10px] text-slate-400 block">${formattedDate} • ${m.time}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] bg-gold/10 text-gold px-2 py-0.5 rounded-full border border-gold/30 font-semibold">${m.players ? m.players.length : 0} Pemain</span>
+                        <button type="button" onclick="setActiveMatch(${m.id})" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded-lg cursor-pointer">Buka</button>
+                    </div>
+                `;
+                historyContainer.appendChild(card);
+            });
+        }
+
+        function setActiveMatch(matchId) {
+            appState.activeMatchId = matchId;
+            saveData();
+            switchTab('sec-match');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
