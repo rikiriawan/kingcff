@@ -125,7 +125,9 @@
                 <div class="flex justify-between items-start mb-2">
                     <div>
                         <span class="inline-block bg-gold/20 text-gold border border-gold/40 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase mb-1">Jadwal Pertandingan Terdekat</span>
-                        <h2 id="matchVenueDisplay" class="text-lg font-extrabold text-slate-100">Belum ada jadwal main</h2>
+                        <h2 id="matchTitleDisplay" class="text-lg font-extrabold text-slate-100">Belum ada jadwal main</h2>
+                        <p id="matchVenueDisplay" class="text-xs text-gold-light/80 font-medium mt-0.5"></p>
+                        <p id="matchTeamsDisplay" class="text-[11px] text-slate-400 mt-1 italic"></p>
                     </div>
                     <button id="adminAddMatchBtn" type="button" onclick="openMatchModal()" class="hidden bg-gold hover:bg-gold-dark text-navy-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1 cursor-pointer">
                         <i class="fa-solid fa-plus"></i> + Buat Match
@@ -317,25 +319,25 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Tipe Laga</label>
-                        <select id="inputType" onchange="toggleMatchTypeFields()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <select id="inputType" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                             <option value="fun">Fun Football / Friendly</option>
                             <option value="trofeo">Trofeo / Turnamen</option>
                         </select>
                     </div>
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
-                        <input type="text" id="inputVenue" placeholder="Contoh: Sentul Otopark" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Judul Pertandingan / Event</label>
+                        <input type="text" id="inputMatchTitle" placeholder="Contoh: Friendly Match Week 4" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                 </div>
 
-                <div id="trofeoFields" class="hidden space-y-3 p-3 bg-navy/40 border border-gold/30 rounded-xl">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Turnamen / Trofeo</label>
-                        <input type="text" id="inputTournamentName" placeholder="Contoh: Trofeo CFF Cup 2026" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
+                        <input type="text" id="inputVenue" placeholder="Contoh: Mabrur Pratama" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim-tim Lawan (Pisahkan dengan koma)</label>
-                        <input type="text" id="inputOpponents" placeholder="Contoh: Tim A, Tim B, King CFF" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim Bertanding (Koma)</label>
+                        <input type="text" id="inputTeams" placeholder="Contoh: Tim Merah vs Tim Hijau" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                 </div>
 
@@ -495,20 +497,12 @@
             }
         }
 
-        function toggleMatchTypeFields() {
-            const type = document.getElementById('inputType').value;
-            const trofeoDiv = document.getElementById('trofeoFields');
-            if (type === 'trofeo') {
-                trofeoDiv.classList.remove('hidden');
-            } else {
-                trofeoDiv.classList.add('hidden');
-            }
-        }
-
         function renderActiveMatch() {
             const activeMatch = appState.matches.find(m => m.id === appState.activeMatchId);
             if (!activeMatch) {
-                document.getElementById('matchVenueDisplay').innerText = "Belum Ada Jadwal Main";
+                document.getElementById('matchTitleDisplay').innerText = "Belum Ada Jadwal Main";
+                document.getElementById('matchVenueDisplay').innerText = "";
+                document.getElementById('matchTeamsDisplay').innerText = "";
                 document.getElementById('matchDateDisplay').innerText = "-";
                 document.getElementById('matchTimeDisplay').innerText = "-";
                 document.getElementById('slotCountDisplay').innerText = "0";
@@ -520,11 +514,9 @@
             const dayName = days[d.getDay()] || '';
             const formattedDate = `${dayName}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
 
-            const titleDisplay = activeMatch.type === 'trofeo' && activeMatch.tournamentName 
-                ? `${activeMatch.tournamentName} - ${activeMatch.venue}` 
-                : activeMatch.venue;
-
-            document.getElementById('matchVenueDisplay').innerText = titleDisplay;
+            document.getElementById('matchTitleDisplay').innerText = activeMatch.title || activeMatch.venue;
+            document.getElementById('matchVenueDisplay').innerText = `📍 Venue: ${activeMatch.venue}`;
+            document.getElementById('matchTeamsDisplay').innerText = activeMatch.teams ? `⚔️ Tim: ${activeMatch.teams}` : '';
             document.getElementById('matchDateDisplay').innerText = formattedDate;
             document.getElementById('matchTimeDisplay').innerText = activeMatch.time;
             
@@ -643,9 +635,9 @@
         function handleSaveNewMatch(e) {
             e.preventDefault();
             const type = document.getElementById('inputType').value;
+            const title = document.getElementById('inputMatchTitle').value.trim();
             const venue = document.getElementById('inputVenue').value.trim();
-            const tournamentName = document.getElementById('inputTournamentName').value.trim();
-            const opponents = document.getElementById('inputOpponents').value.trim();
+            const teams = document.getElementById('inputTeams').value.trim();
             const date = document.getElementById('inputDate').value;
             const time = document.getElementById('inputTime').value.trim();
             const score = document.getElementById('inputScore').value.trim();
@@ -655,9 +647,9 @@
             const newMatch = {
                 id: Date.now(),
                 type: type,
+                title: title,
                 venue: venue,
-                tournamentName: tournamentName,
-                opponents: opponents,
+                teams: teams,
                 date: date,
                 time: time,
                 score: score || 'Belum ada skor',
@@ -671,7 +663,6 @@
             saveData();
             closeMatchModal();
             document.getElementById('newMatchForm').reset();
-            toggleMatchTypeFields();
         }
 
         function copyListToWhatsApp() {
@@ -687,10 +678,9 @@
 
             let text = `*CUMA FUN FOOTBALL FC - LIST MAIN*\n`;
             text += `------------------------------------\n`;
-            if (activeMatch.type === 'trofeo' && activeMatch.tournamentName) {
-                text += `🏆 *Turnamen:* ${activeMatch.tournamentName}\n`;
-            }
+            text += `⚽ *Match:* ${activeMatch.title || activeMatch.venue}\n`;
             text += `🏟️ *Venue:* ${activeMatch.venue}\n`;
+            if (activeMatch.teams) text += `⚔️ *Tim:* ${activeMatch.teams}\n`;
             text += `📅 *Hari/Tgl:* ${dateStr}\n`;
             text += `⏰ *Jam:* ${activeMatch.time}\n`;
             if (activeMatch.htm && activeMatch.htm !== '-') {
@@ -799,21 +789,16 @@
                 card.className = "p-3 rounded-xl bg-navy-dark/70 border border-gold/20 text-xs space-y-2 cursor-pointer hover:border-gold transition";
                 card.onclick = () => showMatchDetail(m.id);
 
-                let headerLabel = m.venue;
-                if (m.type === 'trofeo' && m.tournamentName) {
-                    headerLabel = `🏆 ${m.tournamentName} (${m.venue})`;
-                }
-
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-gold">${headerLabel}</h4>
+                        <h4 class="font-bold text-gold">${m.title || m.venue}</h4>
                         <span class="text-[10px] bg-gold/10 text-gold px-2 py-0.5 rounded-full border border-gold/30 font-semibold">${m.score}</span>
                     </div>
                     <div class="flex justify-between text-slate-400 text-[11px]">
-                        <span>📅 ${formattedDate}</span>
+                        <span>📍 ${m.venue} (${formattedDate})</span>
                         <span>💰 HTM: ${m.htm}</span>
                     </div>
-                    ${m.opponents ? `<div class="text-[10px] text-slate-300">⚔️ Lawan: ${m.opponents}</div>` : ''}
+                    ${m.teams ? `<div class="text-[10px] text-slate-300">⚔️ Tim: ${m.teams}</div>` : ''}
                 `;
                 historyContainer.appendChild(card);
             });
@@ -829,13 +814,13 @@
 
             let content = `
                 <div class="space-y-2">
+                    <p><strong>Judul Pertandingan:</strong> ${match.title || '-'}</p>
                     <p><strong>Tipe Laga:</strong> ${match.type === 'trofeo' ? 'Trofeo / Turnamen' : 'Fun Football / Friendly'}</p>
-                    ${match.tournamentName ? `<p><strong>Nama Turnamen:</strong> ${match.tournamentName}</p>` : ''}
                     <p><strong>Venue / Lapangan:</strong> ${match.venue}</p>
+                    ${match.teams ? `<p><strong>Tim Bertanding:</strong> ${match.teams}</p>` : ''}
                     <p><strong>Hari, Tanggal:</strong> ${formattedDate} (${match.time})</p>
                     <p><strong>Skor / Hasil:</strong> <span class="text-gold font-bold">${match.score}</span></p>
                     <p><strong>HTM / Patungan:</strong> ${match.htm}</p>
-                    ${match.opponents ? `<p><strong>Tim Lawan:</strong> ${match.opponents}</p>` : ''}
                     ${match.photoLink ? `<p><strong>Dokumentasi:</strong> <a href="${match.photoLink}" target="_blank" class="text-gold underline">Buka Link Foto / Gdrive</a></p>` : ''}
                     <hr class="border-slate-700 my-2">
                     <p class="font-bold text-gold">Daftar Pemain Hadir (${(match.players || []).length} Orang):</p>
