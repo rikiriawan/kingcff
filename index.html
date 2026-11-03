@@ -233,9 +233,9 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Lapangan / Venue</label>
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Tim Lawan / Venue</label>
                         <select id="filterVenue" onchange="applyFilters()" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-lg p-2 outline-none">
-                            <option value="ALL">Semua Lapangan</option>
+                            <option value="ALL">Semua Tim / Venue</option>
                         </select>
                     </div>
                     <div>
@@ -270,7 +270,7 @@
                         <span id="statMatchCount" class="text-2xl font-extrabold text-gold">0</span>
                     </div>
                     <div class="bg-navy-dark/80 border border-gold/30 rounded-xl p-3 text-center">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lapangan Terfavorit</span>
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold block">Lawan / Venue Sering Main</span>
                         <span id="statTopVenue" class="text-xs font-bold text-slate-200 block truncate mt-1">-</span>
                     </div>
                 </div>
@@ -347,18 +347,18 @@
                     </div>
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Judul Match / Nama Laga</label>
-                        <input type="text" id="inputMatchTitle" placeholder="Contoh: Match Pekan 12 / Trofeo CFF" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <input type="text" id="inputMatchTitle" placeholder="Contoh: Match Pekan 12" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">Nama Lapangan / Venue</label>
-                        <input type="text" id="inputVenue" placeholder="Contoh: Sentul Otopark" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <input type="text" id="inputVenue" placeholder="Contoh: Mabrur Pratama" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Daftar Tim Bertanding</label>
-                        <input type="text" id="inputTeamList" placeholder="Contoh: Tim Hitam vs Tim Emas" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Daftar Tim Lawan (Pisah koma jika trofeo)</label>
+                        <input type="text" id="inputTeamList" placeholder="Contoh: Tim C atau Tim C, Tim D" required class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                 </div>
 
@@ -375,8 +375,8 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] text-gold-light font-medium block mb-1">Skor / Hasil Akhir (Opsional)</label>
-                        <input type="text" id="inputScore" placeholder="Contoh: Tim Hitam 3-1 / Seri 2-2" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                        <label class="text-[10px] text-gold-light font-medium block mb-1">Skor / Hasil Akhir</label>
+                        <input type="text" id="inputScore" placeholder="Contoh: Menang 3-1 / Seri 2-2" class="w-full bg-navy-dark border border-gold/40 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                     </div>
                     <div>
                         <label class="text-[10px] text-gold-light font-medium block mb-1">HTM / Patungan (Rp)</label>
@@ -441,7 +441,9 @@
                 const data = snapshot.val();
                 if (data && data.matches && data.matches.length > 0) {
                     appState.matches = data.matches;
-                    appState.activeMatchId = data.activeMatchId || data.matches[0].id;
+                    if (!appState.matches.some(m => m.id === appState.activeMatchId)) {
+                        appState.activeMatchId = data.matches[0].id;
+                    }
                 } else {
                     appState.matches = [];
                     appState.activeMatchId = null;
@@ -572,7 +574,7 @@
             
             const teamsElem = document.getElementById('matchTeamsDisplay');
             if (activeMatch.teamList) {
-                teamsElem.innerText = `⚔️ Tim: ${activeMatch.teamList}`;
+                teamsElem.innerText = `⚔️ Lawan: ${activeMatch.teamList}`;
                 teamsElem.classList.remove('hidden');
             } else {
                 teamsElem.classList.add('hidden');
@@ -752,7 +754,7 @@
             text += `⚽ *Match:* ${activeMatch.title || 'Fun Football'}\n`;
             text += `🏟️ *Venue:* ${activeMatch.venue}\n`;
             if (activeMatch.teamList) {
-                text += `⚔️ *Tim:* ${activeMatch.teamList}\n`;
+                text += `⚔️ *Lawan:* ${activeMatch.teamList}\n`;
             }
             text += `📅 *Hari/Tgl:* ${dateStr}\n`;
             text += `⏰ *Jam:* ${activeMatch.time}\n`;
@@ -791,15 +793,26 @@
             const venueSelect = document.getElementById('filterVenue');
             const yearSelect = document.getElementById('filterYear');
 
-            const venues = [...new Set(appState.matches.map(m => m.venue))];
+            // Ekstrak semua tim lawan dengan memecah string berbasis koma
+            let allTeamsSet = new Set();
+            appState.matches.forEach(m => {
+                if (m.teamList) {
+                    m.teamList.split(',').forEach(t => {
+                        let cleanTeam = t.trim();
+                        if (cleanTeam) allTeamsSet.add(cleanTeam);
+                    });
+                }
+            });
+            const teamListArray = [...allTeamsSet];
+
             const years = [...new Set(appState.matches.map(m => new Date(m.date).getFullYear()))];
 
             const currentVenue = venueSelect.value;
             const currentYear = yearSelect.value;
 
-            venueSelect.innerHTML = `<option value="ALL">Semua Lapangan</option>`;
-            venues.forEach(v => {
-                venueSelect.innerHTML += `<option value="${v}">${v}</option>`;
+            venueSelect.innerHTML = `<option value="ALL">Semua Tim Lawan</option>`;
+            teamListArray.forEach(t => {
+                venueSelect.innerHTML += `<option value="${t}">${t}</option>`;
             });
             venueSelect.value = currentVenue || "ALL";
 
@@ -819,29 +832,45 @@
 
             const filtered = appState.matches.filter(m => {
                 const d = new Date(m.date);
-                const matchVenue = vFilter === "ALL" || m.venue === vFilter;
+                
+                let matchTeam = true;
+                if (vFilter !== "ALL") {
+                    let teamsInMatch = [];
+                    if (m.teamList) {
+                        teamsInMatch = m.teamList.split(',').map(t => t.trim());
+                    }
+                    matchTeam = teamsInMatch.includes(vFilter);
+                }
+
                 const matchMonth = mFilter === "ALL" || d.getMonth().toString() === mFilter;
                 const matchYear = yFilter === "ALL" || d.getFullYear().toString() === yFilter;
-                return matchVenue && matchMonth && matchYear;
+                return matchTeam && matchMonth && matchYear;
             });
 
             document.getElementById('statMatchCount').innerText = filtered.length;
 
-            const venueCounts = {};
+            const teamCounts = {};
             filtered.forEach(m => {
-                venueCounts[m.venue] = (venueCounts[m.venue] || 0) + 1;
+                if (m.teamList) {
+                    m.teamList.split(',').forEach(t => {
+                        let clean = t.trim();
+                        if (clean) {
+                            teamCounts[clean] = (teamCounts[clean] || 0) + 1;
+                        }
+                    });
+                }
             });
 
-            let topV = "-";
+            let topT = "-";
             let topC = 0;
-            for (const [v, c] of Object.entries(venueCounts)) {
+            for (const [t, c] of Object.entries(teamCounts)) {
                 if (c > topC) {
                     topC = c;
-                    topV = v;
+                    topT = t;
                 }
             }
 
-            document.getElementById('statTopVenue').innerText = topV !== "-" ? `${topV} (${topC}x)` : "-";
+            document.getElementById('statTopVenue').innerText = topT !== "-" ? `${topT} (${topC}x main)` : "-";
         }
 
         function renderHistory() {
@@ -862,7 +891,7 @@
                 card.className = "p-3 rounded-xl bg-navy-dark/70 border border-gold/20 text-xs space-y-2 cursor-pointer hover:border-gold transition";
                 card.onclick = () => showMatchDetail(m.id);
 
-                const headerLabel = m.title || m.venue;
+                const headerLabel = m.title || "Match Fun Football";
 
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
@@ -873,7 +902,7 @@
                         <span>🏟️ ${m.venue}</span>
                         <span>📅 ${formattedDate}</span>
                     </div>
-                    ${m.teamList ? `<div class="text-[10px] text-slate-300">⚔️ Tim: ${m.teamList}</div>` : ''}
+                    ${m.teamList ? `<div class="text-[10px] text-slate-300">⚔️ Lawan: ${m.teamList}</div>` : ''}
                 `;
                 historyContainer.appendChild(card);
             });
@@ -892,7 +921,7 @@
                     <p><strong>Judul Match:</strong> ${match.title || '-'}</p>
                     <p><strong>Tipe Laga:</strong> ${match.type === 'trofeo' ? 'Trofeo / Turnamen' : 'Fun Football / Friendly'}</p>
                     <p><strong>Venue / Lapangan:</strong> ${match.venue}</p>
-                    ${match.teamList ? `<p><strong>Daftar Tim:</strong> ${match.teamList}</p>` : ''}
+                    ${match.teamList ? `<p><strong>Daftar Tim Lawan:</strong> ${match.teamList}</p>` : ''}
                     <p><strong>Hari, Tanggal:</strong> ${formattedDate} (${match.time})</p>
                     <p><strong>Skor / Hasil:</strong> <span class="text-gold font-bold">${match.score}</span></p>
                     <p><strong>HTM / Patungan:</strong> ${match.htm}</p>
